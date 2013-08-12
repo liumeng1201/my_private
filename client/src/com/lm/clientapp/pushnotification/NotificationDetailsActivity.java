@@ -55,14 +55,6 @@ public class NotificationDetailsActivity extends Activity {
 		Log.d(LOGTAG, "notificationMessage=" + notificationMessage);
 		Log.d(LOGTAG, "notificationUri=" + notificationUri);
 
-		// Display display = getWindowManager().getDefaultDisplay();
-		// View rootView;
-		// if (display.getWidth() > display.getHeight()) {
-		// rootView = null;
-		// } else {
-		// rootView = null;
-		// }
-
 		View rootView = createView(notificationTitle, notificationMessage,
 				notificationUri);
 		setContentView(rootView);
