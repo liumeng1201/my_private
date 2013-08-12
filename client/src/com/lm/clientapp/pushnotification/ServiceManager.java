@@ -2,6 +2,8 @@ package com.lm.clientapp.pushnotification;
 
 import java.util.Properties;
 
+import com.lm.clientapp.ClientApp;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -35,8 +37,11 @@ public class ServiceManager {
 
 		props = loadProperties();
 		apiKey = props.getProperty("apiKey", "");
-		xmppHost = props.getProperty("xmppHost", "127.0.0.1");
+		// xmppHost = props.getProperty("xmppHost", "127.0.0.1");
 		xmppPort = props.getProperty("xmppPort", "5222");
+		// 从全局变量中获取ServerIP
+		ClientApp clientApp = (ClientApp) context.getApplicationContext();
+		xmppHost = clientApp.getServerIP();
 		Log.i(LOGTAG, "apiKey=" + apiKey);
 		Log.i(LOGTAG, "xmppHost=" + xmppHost);
 		Log.i(LOGTAG, "xmppPort=" + xmppPort);

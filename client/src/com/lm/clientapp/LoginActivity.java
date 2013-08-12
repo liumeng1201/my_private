@@ -49,6 +49,10 @@ public class LoginActivity extends Activity {
 				Log.d(TAG, "save success");
 			}
 
+			// 将服务器保存至全局变量中
+			ClientApp clientApp = (ClientApp) getApplication();
+			clientApp.setServerIP(serverip);
+
 			Intent intent = new Intent(mContext, MainActivity.class);
 			startActivity(intent);
 			LoginActivity.this.finish();

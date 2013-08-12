@@ -9,6 +9,7 @@
         android:targetSdkVersion="15" />
 
     <application
+        android:name="com.lm.clientapp.ClientApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -27,7 +28,6 @@
             android:hardwareAccelerated="true"
             android:label="@string/title_study" >
         </activity>
-
         <activity android:name="com.lm.clientapp.APNActivity" />
         <activity
             android:name="com.lm.clientapp.pushnotification.NotificationDetailsActivity"
