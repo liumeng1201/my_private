@@ -11,6 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 public class Utils {
+	public static final String LOGIN_SHAREPREFERENCES = "client_login_preferences"; 
 	
 	// 判断flashplayer是否已经安装
 	public static boolean checkIfFlashPlayerInstall(Context context) {

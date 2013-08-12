@@ -25,6 +25,9 @@ public class MainActivity extends Activity {
 	private Button btnLoadUrl;
 	private ImageButton btnSettings;
 
+	// 接收推送消息服务的manager
+	private ServiceManager serviceManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,9 +73,19 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (serviceManager != null) {
+			// 退出程序时停止接收推送的消息
+			serviceManager.stopService();
+		}
+	}
+
 	// 启动消息推送服务
 	private void startAPNService() {
-		ServiceManager serviceManager = new ServiceManager(this);
+		serviceManager = new ServiceManager(this);
 		serviceManager.setNotificationIcon(R.drawable.ic_launcher);
 		serviceManager.startService();
 	}

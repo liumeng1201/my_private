@@ -3,7 +3,7 @@ package com.lm.clientapp.pushnotification;
 //Static constants for this package.
 public class Constants {
 
-	public static final String SHARED_PREFERENCE_NAME = "client_preferences";
+	public static final String APN_SHARED_PREFERENCE_NAME = "client_apn_preferences";
 
 	// PREFERENCE KEYS
 	public static final String CALLBACK_ACTIVITY_PACKAGE_NAME = "CALLBACK_ACTIVITY_PACKAGE_NAME";

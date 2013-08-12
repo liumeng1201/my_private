@@ -96,7 +96,8 @@ public class LoginActivity extends Activity {
 
 	// 载入之前保存的用户名、密码、服务器IP信息
 	private void loadSavedInfo() {
-		SharedPreferences info = getPreferences(MODE_PRIVATE);
+		SharedPreferences info = mContext.getSharedPreferences(
+				Utils.LOGIN_SHAREPREFERENCES, MODE_PRIVATE);
 		String username = info.getString("username", null);
 		String password = info.getString("password", null);
 		String serverip = info.getString("serverip", null);
@@ -119,7 +120,8 @@ public class LoginActivity extends Activity {
 	// 保存用户名、密码、服务器IP到preference文件
 	private boolean saveInfo(String username, String password, String serverip,
 			boolean rmbUser, boolean rmbIP) {
-		SharedPreferences info = getPreferences(MODE_PRIVATE);
+		SharedPreferences info = mContext.getSharedPreferences(
+				Utils.LOGIN_SHAREPREFERENCES, MODE_PRIVATE);
 		SharedPreferences.Editor editor = info.edit();
 		if (rmbUser) {
 			editor.putString("username", username);

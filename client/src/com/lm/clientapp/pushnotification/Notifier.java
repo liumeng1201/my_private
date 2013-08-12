@@ -23,7 +23,7 @@ public class Notifier {
 	public Notifier(Context context) {
 		this.context = context;
 		this.sharedPrefs = context.getSharedPreferences(
-				Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+				Constants.APN_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
 		this.notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
@@ -143,7 +143,7 @@ public class Notifier {
 	}
 
 	private boolean isNotificationVibrateEnabled() {
-		return sharedPrefs.getBoolean(Constants.SETTINGS_VIBRATE_ENABLED, true);
+		return sharedPrefs.getBoolean(Constants.SETTINGS_VIBRATE_ENABLED, false);
 	}
 
 	private boolean isNotificationToastEnabled() {

@@ -31,7 +31,7 @@ public class NotificationDetailsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		SharedPreferences sharedPrefs = this.getSharedPreferences(
-				Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+				Constants.APN_SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
 		callbackActivityPackageName = sharedPrefs.getString(
 				Constants.CALLBACK_ACTIVITY_PACKAGE_NAME, "");
 		callbackActivityClassName = sharedPrefs.getString(
