@@ -77,7 +77,7 @@ public class NotificationSettingsActivity extends PreferenceActivity {
 		vibratePref.setKey(Constants.SETTINGS_VIBRATE_ENABLED);
 		vibratePref.setTitle("Vibrate");
 		vibratePref.setSummary("Vibrate the phone for notifications");
-		vibratePref.setDefaultValue(Boolean.TRUE);
+		vibratePref.setDefaultValue(Boolean.FALSE);
 		// vibratePref.setDependency(Constants.SETTINGS_NOTIFICATION_ENABLED);
 
 		root.addPreference(notifyPref);

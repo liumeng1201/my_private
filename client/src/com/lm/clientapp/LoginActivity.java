@@ -1,10 +1,14 @@
 package com.lm.clientapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +29,8 @@ public class LoginActivity extends Activity {
 	private boolean rmbUser = false;
 	// 是否记住服务器IP标志
 	private boolean rmbIP = false;
+	// 提示安装FlashPlayer的dialog
+	private AlertDialog.Builder fpiDialog;
 
 	private Context mContext;
 
@@ -58,6 +64,7 @@ public class LoginActivity extends Activity {
 		mContext = LoginActivity.this;
 
 		init();
+		isFlashPlayerInstalled();
 	}
 
 	// 初始化各个组件实例
@@ -70,15 +77,17 @@ public class LoginActivity extends Activity {
 		chbRememberUser = (CheckBox) findViewById(R.id.chb_rememberuser);
 		chbRememberIP = (CheckBox) findViewById(R.id.chb_rememberip);
 
+		initfpiDialog();
+
 		loadSavedInfo();
 
 		btnCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				LoginActivity.this.finish();
-				Intent intent = new Intent(mContext, apnActivity.class);
-				startActivity(intent);
+				LoginActivity.this.finish();
+				// Intent intent = new Intent(mContext, apnActivity.class);
+				// startActivity(intent);
 			}
 		});
 
@@ -120,5 +129,53 @@ public class LoginActivity extends Activity {
 			editor.putString("serverip", serverip);
 		}
 		return editor.commit();
+	}
+
+	// 判断FlashPlayer是否已经安装，未安装则提示进行安装
+	private void isFlashPlayerInstalled() {
+		if (Utils.checkIfFlashPlayerInstall(mContext)) {
+			Log.d(TAG, "already install FlashPlayer");
+		} else {
+			Log.d(TAG, "not install FlashPlayer");
+			fpiDialog.create().show();
+		}
+	}
+
+	// 初始化flash player install Dialog
+	private void initfpiDialog() {
+		fpiDialog = new AlertDialog.Builder(mContext);
+		fpiDialog.setTitle(R.string.tishi);
+		fpiDialog.setMessage(R.string.fpidialog_install);
+		fpiDialog.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Log.d(TAG, "install flashplayer");
+
+						if (Utils.copyApkFromAssets(mContext,
+								"flashplayer.apk", Environment
+										.getExternalStorageDirectory()
+										.getAbsolutePath()
+										+ "/flashplayer.apk")) {
+							Intent intent = new Intent(Intent.ACTION_VIEW);
+							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							intent.setDataAndType(Uri.parse("file://"
+									+ Environment.getExternalStorageDirectory()
+											.getAbsolutePath()
+									+ "/flashplayer.apk"),
+									"application/vnd.android.package-archive");
+							mContext.startActivity(intent);
+						}
+					}
+				});
+		fpiDialog.setNegativeButton(R.string.cancel,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Log.d(TAG, "cancel install");
+					}
+				});
 	}
 }

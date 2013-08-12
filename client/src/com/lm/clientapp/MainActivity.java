@@ -1,14 +1,8 @@
 package com.lm.clientapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,16 +12,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+
+import com.lm.clientapp.pushnotification.ServiceManager;
 
 public class MainActivity extends Activity {
 	private String TAG = "MainActivity";
 	private Context mContext;
-	// 提示安装FlashPlayer的dialog
-	private AlertDialog.Builder fpiDialog;
 
 	private WebView content_WebView;
 	private EditText edtInputUrl;
 	private Button btnLoadUrl;
+	private ImageButton btnSettings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +32,11 @@ public class MainActivity extends Activity {
 		mContext = MainActivity.this;
 
 		init();
-		isFlashPlayerInstalled();
+		startAPNService();
 	}
 
 	// 初始化各个组件实例及各个变量
 	private void init() {
-		initfpiDialog();
-
 		content_WebView = (WebView) findViewById(R.id.content_webview);
 		initWebView(content_WebView);
 
@@ -57,6 +51,16 @@ public class MainActivity extends Activity {
 				content_WebView.loadUrl(url);
 			}
 		});
+
+		btnSettings = (ImageButton) findViewById(R.id.userinfo_setting);
+		btnSettings.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// 跳转至消息推送设置界面
+				ServiceManager.viewNotificationSettings(mContext);
+			}
+		});
 	}
 
 	@Override
@@ -66,52 +70,11 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	// 判断FlashPlayer是否已经安装，未安装则提示进行安装
-	private void isFlashPlayerInstalled() {
-		if (Utils.checkIfFlashPlayerInstall(mContext)) {
-			Log.d(TAG, "already install FlashPlayer");
-		} else {
-			Log.d(TAG, "not install FlashPlayer");
-			fpiDialog.create().show();
-		}
-	}
-
-	// 初始化flash player install Dialog
-	private void initfpiDialog() {
-		fpiDialog = new AlertDialog.Builder(mContext);
-		fpiDialog.setTitle(R.string.tishi);
-		fpiDialog.setMessage(R.string.fpidialog_install);
-		fpiDialog.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						Log.d(TAG, "install flashplayer");
-
-						if (Utils.copyApkFromAssets(mContext,
-								"flashplayer.apk", Environment
-										.getExternalStorageDirectory()
-										.getAbsolutePath()
-										+ "/flashplayer.apk")) {
-							Intent intent = new Intent(Intent.ACTION_VIEW);
-							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							intent.setDataAndType(Uri.parse("file://"
-									+ Environment.getExternalStorageDirectory()
-											.getAbsolutePath()
-									+ "/flashplayer.apk"),
-									"application/vnd.android.package-archive");
-							mContext.startActivity(intent);
-						}
-					}
-				});
-		fpiDialog.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						Log.d(TAG, "cancel install");
-					}
-				});
+	// 启动消息推送服务
+	private void startAPNService() {
+		ServiceManager serviceManager = new ServiceManager(this);
+		serviceManager.setNotificationIcon(R.drawable.ic_launcher);
+		serviceManager.startService();
 	}
 
 	// 初始化WebView设置
