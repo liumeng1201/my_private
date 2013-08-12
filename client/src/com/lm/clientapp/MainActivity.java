@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebSettings;
@@ -19,8 +20,11 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import com.lm.clientapp.pushnotification.ServiceManager;
+import com.lm.clientapp.videoplay.Player;
 
 public class MainActivity extends Activity {
 	private String LOGTAG = "MainActivity";
@@ -30,6 +34,15 @@ public class MainActivity extends Activity {
 	private EditText edtInputUrl;
 	private Button btnLoadUrl;
 	private ImageButton btnSettings;
+
+	private RelativeLayout content_Video;
+	private SurfaceView video_surfaceview;
+	private RelativeLayout video_control;
+	private SeekBar video_seekbar;
+	private Button video_btnplay;
+	private Button video_btnpause;
+	private Button content_video_close;
+	private Player video_player;
 
 	// 接收推送消息服务的manager
 	private ServiceManager serviceManager;
@@ -53,6 +66,14 @@ public class MainActivity extends Activity {
 		content_WebView = (WebView) findViewById(R.id.content_webview);
 		initWebView(content_WebView);
 
+		content_Video = (RelativeLayout) findViewById(R.id.content_video);
+		video_surfaceview = (SurfaceView) findViewById(R.id.video_surfaceview);
+		video_control = (RelativeLayout) findViewById(R.id.video_control);
+		video_seekbar = (SeekBar) findViewById(R.id.video_seekbar);
+		video_btnplay = (Button) findViewById(R.id.video_btnplay);
+		video_btnpause = (Button) findViewById(R.id.video_btnpause);
+		content_video_close = (Button) findViewById(R.id.content_video_close);
+
 		edtInputUrl = (EditText) findViewById(R.id.inputurl);
 		btnLoadUrl = (Button) findViewById(R.id.loadurl);
 		btnLoadUrl.setOnClickListener(new OnClickListener() {
@@ -61,7 +82,8 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String url = edtInputUrl.getText().toString();
-				content_WebView.loadUrl(url);
+				setContent(url);
+				// content_WebView.loadUrl(url);
 			}
 		});
 
@@ -94,8 +116,9 @@ public class MainActivity extends Activity {
 							+ map.get("message").toString());
 					Log.d(LOGTAG, "notificationUri="
 							+ map.get("uri").toString());
-					
-					content_WebView.loadUrl(map.get("message").toString());
+
+					setContent(map.get("message").toString());
+					// content_WebView.loadUrl(map.get("message").toString());
 				}
 			}
 		};
@@ -158,5 +181,83 @@ public class MainActivity extends Activity {
 				return true;
 			}
 		});
+	}
+
+	// 设置内容区域要显示的内容
+	// .mp4结尾的url使用视频播放器来显示
+	// 其余url使用WebView来显示
+	private void setContent(String url) {
+		String arraytmp[] = url.split("\\.");
+		String suffix = arraytmp[arraytmp.length - 1];
+		if (suffix.equalsIgnoreCase("mp4")) {
+			// 显示播放器
+			showAndSetVideoView(url);
+		} else {
+			// 显示WebView
+			showWebView(url);
+		}
+	}
+
+	// 显示content_WebView
+	private void showWebView(String url) {
+		content_Video.setVisibility(View.GONE);
+		content_WebView.setVisibility(View.VISIBLE);
+		content_WebView.loadUrl(url);
+	}
+
+	// 显示并设置content_Video
+	private void showAndSetVideoView(String url) {
+		content_WebView.setVisibility(View.GONE);
+		content_Video.setVisibility(View.VISIBLE);
+		video_control.setVisibility(View.VISIBLE);
+		video_seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
+		video_btnplay.setOnClickListener(new VideoPlayControlEvent(url));
+		video_btnpause.setOnClickListener(new VideoPlayControlEvent(url));
+		content_video_close.setOnClickListener(new VideoPlayControlEvent(url));
+		video_player = new Player(video_surfaceview, video_seekbar);
+		
+//		video_player.playUrl(url);
+	}
+
+	class VideoPlayControlEvent implements OnClickListener {
+		private String url;
+
+		VideoPlayControlEvent(String url) {
+			this.url = url;
+		}
+
+		@Override
+		public void onClick(View view) {
+			if (view == video_btnpause) {
+				video_player.pause();
+			} else if (view == video_btnplay) {
+				video_player.playUrl(url);
+			} else if (view == content_video_close) {
+				video_player.stop();
+				showWebView(url);
+			}
+		}
+	}
+
+	class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
+		int progress;
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			// 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
+			this.progress = progress * video_player.mediaPlayer.getDuration()
+					/ seekBar.getMax();
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
+			video_player.mediaPlayer.seekTo(progress);
+		}
 	}
 }
