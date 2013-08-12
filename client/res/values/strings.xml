@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ClientApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Version 1.0</string>
+    
+    <string name="hello">Hello Android, DemoAppActivity!</string>
+    <string name="settings">Settings</string>
+    
+    <string name="title_login">登录</string>
+    <string name="title_study">学习</string>
+    <string name="userclass">用户班级</string>
+    <string name="ok">确定</string>
+    
+    <string name="login_title">登录</string>
+    <string name="username">用&#160;户&#160;名</string>
+    <string name="password">密&#160;&#160;&#160;&#160;&#160;&#160;码</string>
+    <string name="serverip">服务器IP</string>
+    <string name="remember_user">记住用户名和密码</string>
+    <string name="remember_ip">记住服务器IP</string>
+    <string name="login">登录</string>
+    <string name="cancel">取消</string>
+    
+    <string name="tishi">提示</string>
+    <string name="fpidialog_install">未检测到FlashPlayer，点击“确定”安装</string>
+
+</resources>
