@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.lm.clientapp.pushnotification.ServiceManager;
 
 //This is an android push notification demo application.
-public class apnActivity extends Activity {
+public class APNActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class apnActivity extends Activity {
 		Button okButton = (Button) findViewById(R.id.btn_settings);
 		okButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				ServiceManager.viewNotificationSettings(apnActivity.this);
+				ServiceManager.viewNotificationSettings(APNActivity.this);
 			}
 		});
 

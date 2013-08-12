@@ -1,8 +1,14 @@
 package com.lm.clientapp;
 
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +23,7 @@ import android.widget.ImageButton;
 import com.lm.clientapp.pushnotification.ServiceManager;
 
 public class MainActivity extends Activity {
-	private String TAG = "MainActivity";
+	private String LOGTAG = "MainActivity";
 	private Context mContext;
 
 	private WebView content_WebView;
@@ -27,6 +33,9 @@ public class MainActivity extends Activity {
 
 	// 接收推送消息服务的manager
 	private ServiceManager serviceManager;
+	// APN广播
+	private APNReceiver apnReceiver;
+	private Handler mHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,7 @@ public class MainActivity extends Activity {
 
 		init();
 		startAPNService();
+		initAPNReceiver();
 	}
 
 	// 初始化各个组件实例及各个变量
@@ -64,6 +74,29 @@ public class MainActivity extends Activity {
 				ServiceManager.viewNotificationSettings(mContext);
 			}
 		});
+
+		mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+
+				// 接收到服务器端推动的信息之后更新内容
+				if (msg.what == Utils.REFRESH_CONTENT) {
+					Map map = (Map) msg.obj;
+					Log.d(LOGTAG, "notificationId="
+							+ map.get("notificationId").toString());
+					Log.d(LOGTAG, "notificationApiKey="
+							+ map.get("apiKey").toString());
+					Log.d(LOGTAG, "notificationTitle="
+							+ map.get("title").toString());
+					Log.d(LOGTAG, "notificationMessage="
+							+ map.get("message").toString());
+					Log.d(LOGTAG, "notificationUri="
+							+ map.get("uri").toString());
+				}
+			}
+		};
 	}
 
 	@Override
@@ -81,6 +114,11 @@ public class MainActivity extends Activity {
 			// 退出程序时停止接收推送的消息
 			serviceManager.stopService();
 		}
+
+		if (apnReceiver != null) {
+			// 解除APNReceiver广播
+			unregisterReceiver(apnReceiver);
+		}
 	}
 
 	// 启动消息推送服务
@@ -88,6 +126,14 @@ public class MainActivity extends Activity {
 		serviceManager = new ServiceManager(this);
 		serviceManager.setNotificationIcon(R.drawable.ic_launcher);
 		serviceManager.startService();
+	}
+
+	// 初始化APNReceiver广播
+	private void initAPNReceiver() {
+		apnReceiver = new APNReceiver(mHandler);
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Utils.SEND_RECEIVER_MESSAGE);
+		registerReceiver(apnReceiver, filter);
 	}
 
 	// 初始化WebView设置

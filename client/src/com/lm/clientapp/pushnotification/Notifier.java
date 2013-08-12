@@ -2,6 +2,8 @@ package com.lm.clientapp.pushnotification;
 
 import java.util.Random;
 
+import com.lm.clientapp.Utils;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -74,6 +76,15 @@ public class Notifier {
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 					intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+			// 接收到服务器端推送的信息之后发送广播通知APNReceiver有更新
+			Intent intent2 = new Intent(Utils.SEND_RECEIVER_MESSAGE);
+			intent2.putExtra(Constants.NOTIFICATION_ID, notificationId);
+			intent2.putExtra(Constants.NOTIFICATION_API_KEY, apiKey);
+			intent2.putExtra(Constants.NOTIFICATION_TITLE, title);
+			intent2.putExtra(Constants.NOTIFICATION_MESSAGE, message);
+			intent2.putExtra(Constants.NOTIFICATION_URI, uri);
+			context.sendBroadcast(intent2);
+
 			notification.setLatestEventInfo(context, title, message,
 					contentIntent);
 			notificationManager.notify(random.nextInt(), notification);
@@ -96,7 +107,8 @@ public class Notifier {
 	}
 
 	private boolean isNotificationVibrateEnabled() {
-		return sharedPrefs.getBoolean(Constants.SETTINGS_VIBRATE_ENABLED, false);
+		return sharedPrefs
+				.getBoolean(Constants.SETTINGS_VIBRATE_ENABLED, false);
 	}
 
 	private boolean isNotificationToastEnabled() {

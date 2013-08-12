@@ -27,8 +27,8 @@
             android:hardwareAccelerated="true"
             android:label="@string/title_study" >
         </activity>
-        
-        <activity android:name="com.lm.clientapp.apnActivity" />
+
+        <activity android:name="com.lm.clientapp.APNActivity" />
         <activity
             android:name="com.lm.clientapp.pushnotification.NotificationDetailsActivity"
             android:label="Notification Details" />
