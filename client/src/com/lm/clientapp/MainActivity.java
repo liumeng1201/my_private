@@ -94,6 +94,8 @@ public class MainActivity extends Activity {
 							+ map.get("message").toString());
 					Log.d(LOGTAG, "notificationUri="
 							+ map.get("uri").toString());
+					
+					content_WebView.loadUrl(map.get("message").toString());
 				}
 			}
 		};
