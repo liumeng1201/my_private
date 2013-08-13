@@ -65,8 +65,8 @@ public class MainActivity extends Activity {
 		content_WebView = (WebView) findViewById(R.id.content_webview);
 		initWebView(content_WebView);
 
-		content_Video = (RelativeLayout) findViewById(R.id.content_video);
 		video_surfaceview = (SurfaceView) findViewById(R.id.video_surfaceview);
+		content_Video = (RelativeLayout) findViewById(R.id.content_video);
 		video_control = (RelativeLayout) findViewById(R.id.video_control);
 		video_seekbar = (SeekBar) findViewById(R.id.video_seekbar);
 		video_btnpause = (Button) findViewById(R.id.video_btnpause);
@@ -201,6 +201,7 @@ public class MainActivity extends Activity {
 
 	// 显示content_WebView
 	private void showWebView() {
+		video_player.stop();
 		content_Video.setVisibility(View.GONE);
 		content_WebView.setVisibility(View.VISIBLE);
 	}
@@ -235,8 +236,8 @@ public class MainActivity extends Activity {
 			if (view == video_btnpause) {
 				video_player.pause();
 			} else if (view == content_video_close) {
-				video_player.stop();
 				showWebView();
+				// video_surfaceview = null;
 			}
 		}
 	}

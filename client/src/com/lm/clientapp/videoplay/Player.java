@@ -67,7 +67,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			default:
 				break;
 			}
-
 		};
 	};
 
@@ -111,6 +110,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
+		mTimer.cancel();
 		Log.d("mediaPlayer", "stop player");
 	}
 
@@ -146,7 +146,6 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		videoHeight = mediaPlayer.getVideoHeight();
 		if (videoHeight != 0 && videoWidth != 0) {
 			arg0.start();
-			arg0.pause();
 		}
 		Log.d("mediaPlayer", "onPrepared");
 	}
@@ -163,10 +162,5 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		int currentProgress = skbProgress.getMax()
 				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
 		// Log.e(currentProgress + "% play", bufferingProgress + "% buffer");
-
-		if ((bufferingProgress >= 5) && (bufferingProgress < 6)) {
-			playerhandle.sendEmptyMessage(PLAYER_START);
-			Log.d("mediaPlayer", "ready to send msg");
-		}
 	}
 }
