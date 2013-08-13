@@ -30,6 +30,8 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		surfaceHolder.addCallback(this);
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		mTimer.schedule(mTimerTask, 0, 1000);
+
+		mediaPlayer = new MediaPlayer();
 	}
 
 	// 通过定时器和Handler来更新进度条
@@ -62,6 +64,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	}
 
 	public void playUrl(String videoUrl) {
+		// mediaPlayer = new MediaPlayer();
 		try {
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(videoUrl);
@@ -80,7 +83,11 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	}
 
 	public void pause() {
-		mediaPlayer.pause();
+		if (mediaPlayer.isPlaying()) {
+			mediaPlayer.pause();
+		} else {
+			mediaPlayer.start();
+		}
 	}
 
 	public void stop() {
@@ -92,14 +99,15 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	}
 
 	@Override
-	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
+	public void surfaceChanged(SurfaceHolder surfaceholder, int arg1, int arg2,
+			int arg3) {
 		Log.d("mediaPlayer", "surface changed");
 	}
 
 	@Override
-	public void surfaceCreated(SurfaceHolder arg0) {
+	public void surfaceCreated(SurfaceHolder surfaceholder) {
 		try {
-			mediaPlayer = new MediaPlayer();
+			// mediaPlayer = new MediaPlayer();
 			mediaPlayer.setDisplay(surfaceHolder);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnBufferingUpdateListener(this);
@@ -111,7 +119,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	}
 
 	@Override
-	public void surfaceDestroyed(SurfaceHolder arg0) {
+	public void surfaceDestroyed(SurfaceHolder surfaceholder) {
 		Log.d("mediaPlayer", "surface destroyed");
 	}
 
@@ -129,7 +137,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
-
+		Log.d("mediaPlayer", "onCompletion");
 	}
 
 	@Override

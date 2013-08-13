@@ -77,7 +77,6 @@ public class MainActivity extends Activity {
 		edtInputUrl = (EditText) findViewById(R.id.inputurl);
 		btnLoadUrl = (Button) findViewById(R.id.loadurl);
 		btnLoadUrl.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -144,6 +143,10 @@ public class MainActivity extends Activity {
 			// 解除APNReceiver广播
 			unregisterReceiver(apnReceiver);
 		}
+
+		if (video_player != null) {
+			video_player.stop();
+		}
 	}
 
 	// 启动消息推送服务
@@ -199,9 +202,13 @@ public class MainActivity extends Activity {
 	}
 
 	// 显示content_WebView
-	private void showWebView(String url) {
+	private void showWebView() {
 		content_Video.setVisibility(View.GONE);
 		content_WebView.setVisibility(View.VISIBLE);
+	}
+
+	private void showWebView(String url) {
+		showWebView();
 		content_WebView.loadUrl(url);
 	}
 
@@ -215,8 +222,8 @@ public class MainActivity extends Activity {
 		video_btnpause.setOnClickListener(new VideoPlayControlEvent(url));
 		content_video_close.setOnClickListener(new VideoPlayControlEvent(url));
 		video_player = new Player(video_surfaceview, video_seekbar);
-		
-//		video_player.playUrl(url);
+
+		 video_player.playUrl(url);
 	}
 
 	class VideoPlayControlEvent implements OnClickListener {
@@ -234,7 +241,7 @@ public class MainActivity extends Activity {
 				video_player.playUrl(url);
 			} else if (view == content_video_close) {
 				video_player.stop();
-				showWebView(url);
+				showWebView();
 			}
 		}
 	}
