@@ -5,6 +5,7 @@
     tools:context=".MainActivity" >
 
     <!-- 顶部用户信息及设置layout -->
+
     <RelativeLayout
         android:id="@+id/layout_userinfo"
         android:layout_width="match_parent"
@@ -54,6 +55,7 @@
         android:orientation="horizontal" >
 
         <!-- 左侧导航树layout -->
+
         <FrameLayout
             android:id="@+id/layout_navigate"
             android:layout_width="match_parent"
@@ -76,6 +78,7 @@
         </FrameLayout>
 
         <!-- 右侧内容区域layout -->
+
         <FrameLayout
             android:id="@+id/layout_contentview"
             android:layout_width="match_parent"
@@ -84,12 +87,14 @@
             android:layout_weight="2" >
 
             <!-- 显示除视频之外的内容的WebView -->
+
             <WebView
                 android:id="@+id/content_webview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
             <!-- 视频显示layout -->
+
             <RelativeLayout
                 android:id="@+id/content_video"
                 android:layout_width="match_parent"
@@ -102,6 +107,7 @@
                     android:layout_height="match_parent" />
 
                 <!-- 视频播放控制layout -->
+
                 <RelativeLayout
                     android:id="@+id/video_control"
                     android:layout_width="match_parent"
@@ -126,17 +132,9 @@
                         android:orientation="horizontal" >
 
                         <Button
-                            android:id="@+id/video_btnplay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:text="Play" />
-
-                        <Button
                             android:id="@+id/video_btnpause"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
                             android:text="Pause" />
                     </LinearLayout>
 

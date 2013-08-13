@@ -17,6 +17,8 @@ import android.widget.SeekBar;
 
 public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		MediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
+	private static final int UPDATE_PROGRESSBAR = 10;
+	private static final int PLAYER_START = 11;
 	private int videoWidth;
 	private int videoHeight;
 	public MediaPlayer mediaPlayer;
@@ -41,26 +43,39 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			if (mediaPlayer == null)
 				return;
 			if (mediaPlayer.isPlaying() && skbProgress.isPressed() == false) {
-				handleProgress.sendEmptyMessage(0);
+				playerhandle.sendEmptyMessage(UPDATE_PROGRESSBAR);
 			}
 		}
 	};
 
-	Handler handleProgress = new Handler() {
+	Handler playerhandle = new Handler() {
 		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case UPDATE_PROGRESSBAR:
+				int position = mediaPlayer.getCurrentPosition();
+				int duration = mediaPlayer.getDuration();
 
-			int position = mediaPlayer.getCurrentPosition();
-			int duration = mediaPlayer.getDuration();
-
-			if (duration > 0) {
-				long pos = skbProgress.getMax() * position / duration;
-				skbProgress.setProgress((int) pos);
+				if (duration > 0) {
+					long pos = skbProgress.getMax() * position / duration;
+					skbProgress.setProgress((int) pos);
+				}
+				break;
+			case PLAYER_START:
+				Log.d("mediaPlayer", "start player");
+				play();
+				break;
+			default:
+				break;
 			}
+
 		};
 	};
 
+	// 播放视频
 	public void play() {
-		mediaPlayer.start();
+		if (!mediaPlayer.isPlaying()) {
+			mediaPlayer.start();
+		}
 	}
 
 	public void playUrl(String videoUrl) {
@@ -96,6 +111,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
+		Log.d("mediaPlayer", "stop player");
 	}
 
 	@Override
@@ -130,6 +146,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		videoHeight = mediaPlayer.getVideoHeight();
 		if (videoHeight != 0 && videoWidth != 0) {
 			arg0.start();
+			arg0.pause();
 		}
 		Log.d("mediaPlayer", "onPrepared");
 	}
@@ -145,7 +162,11 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		skbProgress.setSecondaryProgress(bufferingProgress);
 		int currentProgress = skbProgress.getMax()
 				* mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration();
-		Log.e(currentProgress + "% play", bufferingProgress + "% buffer");
+		// Log.e(currentProgress + "% play", bufferingProgress + "% buffer");
 
+		if ((bufferingProgress >= 5) && (bufferingProgress < 6)) {
+			playerhandle.sendEmptyMessage(PLAYER_START);
+			Log.d("mediaPlayer", "ready to send msg");
+		}
 	}
 }

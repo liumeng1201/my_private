@@ -39,7 +39,6 @@ public class MainActivity extends Activity {
 	private SurfaceView video_surfaceview;
 	private RelativeLayout video_control;
 	private SeekBar video_seekbar;
-	private Button video_btnplay;
 	private Button video_btnpause;
 	private Button content_video_close;
 	private Player video_player;
@@ -70,7 +69,6 @@ public class MainActivity extends Activity {
 		video_surfaceview = (SurfaceView) findViewById(R.id.video_surfaceview);
 		video_control = (RelativeLayout) findViewById(R.id.video_control);
 		video_seekbar = (SeekBar) findViewById(R.id.video_seekbar);
-		video_btnplay = (Button) findViewById(R.id.video_btnplay);
 		video_btnpause = (Button) findViewById(R.id.video_btnpause);
 		content_video_close = (Button) findViewById(R.id.content_video_close);
 
@@ -218,12 +216,11 @@ public class MainActivity extends Activity {
 		content_Video.setVisibility(View.VISIBLE);
 		video_control.setVisibility(View.VISIBLE);
 		video_seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-		video_btnplay.setOnClickListener(new VideoPlayControlEvent(url));
 		video_btnpause.setOnClickListener(new VideoPlayControlEvent(url));
 		content_video_close.setOnClickListener(new VideoPlayControlEvent(url));
 		video_player = new Player(video_surfaceview, video_seekbar);
 
-		 video_player.playUrl(url);
+		video_player.playUrl(url);
 	}
 
 	class VideoPlayControlEvent implements OnClickListener {
@@ -237,8 +234,6 @@ public class MainActivity extends Activity {
 		public void onClick(View view) {
 			if (view == video_btnpause) {
 				video_player.pause();
-			} else if (view == video_btnplay) {
-				video_player.playUrl(url);
 			} else if (view == content_video_close) {
 				video_player.stop();
 				showWebView();
