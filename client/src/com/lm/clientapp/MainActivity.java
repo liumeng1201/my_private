@@ -214,10 +214,12 @@ public class MainActivity extends Activity {
 		content_WebView.loadUrl(url);
 	}
 
+	// 停止视频播放
 	private void stopVideoPlayer() {
 		if (video_player != null) {
 			video_player.stop();
 		}
+		// 如果surfaceview不为空则将surfaceview的容器中的surfaceview移除并销毁该surfaceview
 		if (video_surfaceview != null) {
 			video_surfaceview_content.removeAllViews();
 			video_surfaceview.destroyDrawingCache();
@@ -234,6 +236,7 @@ public class MainActivity extends Activity {
 		video_btnpause.setOnClickListener(new VideoPlayControlEvent(url));
 		content_video_close.setOnClickListener(new VideoPlayControlEvent(url));
 
+		// 每次播放视频时均重新创建一个surfaceview来使用
 		video_surfaceview = new SurfaceView(mContext);
 		video_surfaceview_content.addView(video_surfaceview,
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
