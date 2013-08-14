@@ -19,6 +19,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -35,8 +37,9 @@ public class MainActivity extends Activity {
 	private Button btnLoadUrl;
 	private ImageButton btnSettings;
 
-	private RelativeLayout content_Video;
+	private FrameLayout content_Video;
 	private SurfaceView video_surfaceview;
+	private FrameLayout video_surfaceview_content;
 	private RelativeLayout video_control;
 	private SeekBar video_seekbar;
 	private Button video_btnpause;
@@ -65,8 +68,10 @@ public class MainActivity extends Activity {
 		content_WebView = (WebView) findViewById(R.id.content_webview);
 		initWebView(content_WebView);
 
-		video_surfaceview = (SurfaceView) findViewById(R.id.video_surfaceview);
-		content_Video = (RelativeLayout) findViewById(R.id.content_video);
+		// video_surfaceview = (SurfaceView)
+		// findViewById(R.id.video_surfaceview);
+		video_surfaceview_content = (FrameLayout) findViewById(R.id.video_surfaceview_content);
+		content_Video = (FrameLayout) findViewById(R.id.content_video);
 		video_control = (RelativeLayout) findViewById(R.id.video_control);
 		video_seekbar = (SeekBar) findViewById(R.id.video_seekbar);
 		video_btnpause = (Button) findViewById(R.id.video_btnpause);
@@ -142,9 +147,7 @@ public class MainActivity extends Activity {
 			unregisterReceiver(apnReceiver);
 		}
 
-		if (video_player != null) {
-			video_player.stop();
-		}
+		stopVideoPlayer();
 	}
 
 	// 启动消息推送服务
@@ -192,7 +195,7 @@ public class MainActivity extends Activity {
 		String suffix = arraytmp[arraytmp.length - 1];
 		if (suffix.equalsIgnoreCase("mp4")) {
 			// 显示播放器
-			showAndSetVideoView(url);
+			showVideoView(url);
 		} else {
 			// 显示WebView
 			showWebView(url);
@@ -201,7 +204,7 @@ public class MainActivity extends Activity {
 
 	// 显示content_WebView
 	private void showWebView() {
-		video_player.stop();
+		stopVideoPlayer();
 		content_Video.setVisibility(View.GONE);
 		content_WebView.setVisibility(View.VISIBLE);
 	}
@@ -211,14 +214,29 @@ public class MainActivity extends Activity {
 		content_WebView.loadUrl(url);
 	}
 
+	private void stopVideoPlayer() {
+		if (video_player != null) {
+			video_player.stop();
+		}
+		if (video_surfaceview != null) {
+			video_surfaceview_content.removeAllViews();
+			video_surfaceview.destroyDrawingCache();
+			video_surfaceview = null;
+		}
+	}
+
 	// 显示并设置content_Video
-	private void showAndSetVideoView(String url) {
+	private void showVideoView(String url) {
 		content_WebView.setVisibility(View.GONE);
 		content_Video.setVisibility(View.VISIBLE);
 		video_control.setVisibility(View.VISIBLE);
 		video_seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
 		video_btnpause.setOnClickListener(new VideoPlayControlEvent(url));
 		content_video_close.setOnClickListener(new VideoPlayControlEvent(url));
+
+		video_surfaceview = new SurfaceView(mContext);
+		video_surfaceview_content.addView(video_surfaceview,
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		video_player = new Player(video_surfaceview, video_seekbar);
 
 		video_player.playUrl(url);

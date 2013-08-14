@@ -17,6 +17,8 @@ import android.widget.SeekBar;
 
 public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		MediaPlayer.OnPreparedListener, SurfaceHolder.Callback {
+	private String TAG = "mediaplayer";
+
 	private static final int UPDATE_PROGRESSBAR = 10;
 	private static final int PLAYER_START = 11;
 	private int videoWidth;
@@ -33,7 +35,11 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		mTimer.schedule(mTimerTask, 0, 1000);
 
+		if (mediaPlayer != null) {
+			stop();
+		}
 		mediaPlayer = new MediaPlayer();
+		Log.d(TAG, "new player");
 	}
 
 	// 通过定时器和Handler来更新进度条
@@ -61,7 +67,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 				}
 				break;
 			case PLAYER_START:
-				Log.d("mediaPlayer", "start player");
+				Log.d(TAG, "start player");
 				play();
 				break;
 			default:
@@ -78,6 +84,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 	}
 
 	public void playUrl(String videoUrl) {
+		Log.d(TAG, "play url");
 		// mediaPlayer = new MediaPlayer();
 		try {
 			mediaPlayer.reset();
@@ -111,49 +118,58 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 			mediaPlayer = null;
 		}
 		mTimer.cancel();
-		Log.d("mediaPlayer", "stop player");
+		Log.d(TAG, "stop");
+	}
+
+	// 返回播放器的播放状态
+	public boolean isPlaying() {
+		boolean isplaying = false;
+		if (mediaPlayer != null) {
+			mediaPlayer.isPlaying();
+		}
+		return isplaying;
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder surfaceholder, int arg1, int arg2,
 			int arg3) {
-		Log.d("mediaPlayer", "surface changed");
+		Log.d(TAG, "surface changed");
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder surfaceholder) {
 		try {
 			// mediaPlayer = new MediaPlayer();
-			mediaPlayer.setDisplay(surfaceHolder);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnPreparedListener(this);
 		} catch (Exception e) {
-			Log.e("mediaPlayer", "error", e);
+			Log.e(TAG, "error", e);
 		}
-		Log.d("mediaPlayer", "surface created");
+		Log.d(TAG, "surface created");
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder surfaceholder) {
-		Log.d("mediaPlayer", "surface destroyed");
+		Log.d(TAG, "surface destroyed");
 	}
 
 	@Override
 	// 通过onPrepared播放
 	public void onPrepared(MediaPlayer arg0) {
+		Log.d(TAG, "onPrepared");
 		videoWidth = mediaPlayer.getVideoWidth();
 		videoHeight = mediaPlayer.getVideoHeight();
 		if (videoHeight != 0 && videoWidth != 0) {
-			arg0.start();
+			mediaPlayer.start();
+			mediaPlayer.setDisplay(surfaceHolder);
 		}
-		Log.d("mediaPlayer", "onPrepared");
 	}
 
 	@Override
 	public void onCompletion(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
-		Log.d("mediaPlayer", "onCompletion");
+		Log.d(TAG, "onCompletion");
 	}
 
 	@Override

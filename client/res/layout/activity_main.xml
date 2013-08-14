@@ -94,20 +94,26 @@
                 android:layout_height="match_parent" />
 
             <!-- 视频显示layout -->
-
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/content_video"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone" >
 
-                <SurfaceView
-                    android:id="@+id/video_surfaceview"
+                <FrameLayout
+                    android:id="@+id/video_surfaceview_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <!-- 视频播放控制layout -->
+                <!--
+                     <SurfaceView
+                    android:id="@+id/video_surfaceview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                -->
 
+
+                <!-- 视频播放控制layout -->
                 <RelativeLayout
                     android:id="@+id/video_control"
                     android:layout_width="match_parent"
@@ -146,7 +152,7 @@
                         android:layout_margin="15dp"
                         android:text="Close" />
                 </RelativeLayout>
-            </RelativeLayout>
+            </FrameLayout>
         </FrameLayout>
     </LinearLayout>
 
