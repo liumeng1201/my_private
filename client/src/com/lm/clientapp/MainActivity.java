@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.lm.clientapp.pushnotification.ServiceManager;
+import com.lm.clientapp.utils.MyDialog;
 import com.lm.clientapp.utils.Utils;
 import com.lm.clientapp.videoplay.Player;
 import com.lm.clientapp.videoplay.SeekBarChangeEvent;
@@ -156,26 +157,24 @@ public class MainActivity extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			new AlertDialog.Builder(mContext)
-					.setTitle(R.string.tishi)
-					.setMessage(R.string.exit)
-					.setNegativeButton(R.string.cancel,
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-								}
-							})
-					.setPositiveButton(R.string.ok,
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-									MainActivity.this.finish();
-								}
-							}).create().show();
+			MyDialog dialog = new MyDialog(mContext);
+			dialog.setMessage(R.string.exit);
+			dialog.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+						}
+					});
+			dialog.setPositiveButton(R.string.ok,
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							MainActivity.this.finish();
+						}
+					});
+			dialog.show();
 		}
 		return super.onKeyDown(keyCode, event);
 	}

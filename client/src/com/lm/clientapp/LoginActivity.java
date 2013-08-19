@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.lm.clientapp.utils.MyDialog;
 import com.lm.clientapp.utils.Utils;
 
 public class LoginActivity extends Activity {
@@ -32,7 +33,7 @@ public class LoginActivity extends Activity {
 	// 是否记住服务器IP标志
 	private boolean rmbIP = false;
 	// 提示安装FlashPlayer的dialog
-	private AlertDialog.Builder fpiDialog;
+	private MyDialog fpiDialog;
 
 	private Context mContext;
 
@@ -47,23 +48,19 @@ public class LoginActivity extends Activity {
 			rmbUser = chbRememberUser.isChecked();
 			rmbIP = chbRememberIP.isChecked();
 
-			if (username.equals("")) {
-				Intent intent = new Intent();
-			}
-
 			if ((username.equals("")) || (password.equals(""))
 					|| (serverip.equals(""))) {
-				new AlertDialog.Builder(mContext)
-						.setTitle(R.string.tishi)
-						.setMessage(R.string.edittext_null)
-						.setNegativeButton(R.string.ok,
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										// TODO Auto-generated method stub
-									}
-								}).create().show();
+				MyDialog dialog = new MyDialog(mContext);
+				dialog.setMessage(R.string.edittext_null);
+				dialog.setNegativeButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method stub
+							}
+						});
+				dialog.show();
 			} else {
 				if (saveInfo(username, password, serverip, rmbUser, rmbIP)) {
 					Log.d(TAG, "save success");
@@ -111,8 +108,6 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				LoginActivity.this.finish();
-				// Intent intent = new Intent(mContext, apnActivity.class);
-				// startActivity(intent);
 			}
 		});
 
@@ -164,22 +159,19 @@ public class LoginActivity extends Activity {
 			Log.d(TAG, "already install FlashPlayer");
 		} else {
 			Log.d(TAG, "not install FlashPlayer");
-			fpiDialog.create().show();
+			fpiDialog.show();
 		}
 	}
 
 	// 初始化flash player install Dialog
 	private void initfpiDialog() {
-		fpiDialog = new AlertDialog.Builder(mContext);
-		fpiDialog.setTitle(R.string.tishi);
+		fpiDialog = new MyDialog(mContext);
 		fpiDialog.setMessage(R.string.fpidialog_install);
 		fpiDialog.setPositiveButton(R.string.ok,
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						Log.d(TAG, "install flashplayer");
-
 						if (Utils.copyApkFromAssets(mContext,
 								"flashplayer.apk", Environment
 										.getExternalStorageDirectory()
@@ -201,7 +193,6 @@ public class LoginActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
-						Log.d(TAG, "cancel install");
 					}
 				});
 	}
