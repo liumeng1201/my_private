@@ -47,19 +47,12 @@ public class LoginActivity extends Activity {
 			rmbUser = chbRememberUser.isChecked();
 			rmbIP = chbRememberIP.isChecked();
 
-			if ((username != "") && (password != "") && (serverip != "")) {
-				if (saveInfo(username, password, serverip, rmbUser, rmbIP)) {
-					Log.d(TAG, "save success");
-				}
+			if (username.equals("")) {
+				Intent intent = new Intent();
+			}
 
-				// 将服务器保存至全局变量中
-				ClientApp clientApp = (ClientApp) getApplication();
-				clientApp.setServerIP(serverip);
-
-				Intent intent = new Intent(mContext, MainActivity.class);
-				startActivity(intent);
-				LoginActivity.this.finish();
-			} else {
+			if ((username.equals("")) || (password.equals(""))
+					|| (serverip.equals(""))) {
 				new AlertDialog.Builder(mContext)
 						.setTitle(R.string.tishi)
 						.setMessage(R.string.edittext_null)
@@ -71,6 +64,18 @@ public class LoginActivity extends Activity {
 										// TODO Auto-generated method stub
 									}
 								}).create().show();
+			} else {
+				if (saveInfo(username, password, serverip, rmbUser, rmbIP)) {
+					Log.d(TAG, "save success");
+				}
+
+				// 将服务器保存至全局变量中
+				ClientApp clientApp = (ClientApp) getApplication();
+				clientApp.setServerIP(serverip);
+
+				Intent intent = new Intent(mContext, MainActivity.class);
+				startActivity(intent);
+				LoginActivity.this.finish();
 			}
 		}
 	};

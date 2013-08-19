@@ -25,5 +25,6 @@
     <string name="tishi">提示</string>
     <string name="fpidialog_install">未检测到FlashPlayer，点击“确定”安装</string>
     <string name="edittext_null">用户名、密码、ServerIP不能为空</string>
+    <string name="exit">确定要退出?</string>
 
 </resources>
