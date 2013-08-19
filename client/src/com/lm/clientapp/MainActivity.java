@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.lm.clientapp.pushnotification.ServiceManager;
+import com.lm.clientapp.utils.Utils;
 import com.lm.clientapp.videoplay.Player;
 
 public class MainActivity extends Activity {

@@ -1,4 +1,4 @@
-package com.lm.clientapp;
+package com.lm.clientapp.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;

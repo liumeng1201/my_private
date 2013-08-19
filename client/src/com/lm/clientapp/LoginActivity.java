@@ -1,5 +1,7 @@
 package com.lm.clientapp;
 
+import com.lm.clientapp.utils.Utils;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

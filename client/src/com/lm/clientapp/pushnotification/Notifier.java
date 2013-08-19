@@ -2,7 +2,7 @@ package com.lm.clientapp.pushnotification;
 
 import java.util.Random;
 
-import com.lm.clientapp.Utils;
+import com.lm.clientapp.utils.Utils;
 
 import android.app.Notification;
 import android.app.NotificationManager;
