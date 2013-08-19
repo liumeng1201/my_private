@@ -1,7 +1,5 @@
 package com.lm.clientapp;
 
-import com.lm.clientapp.utils.Utils;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,6 +15,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import com.lm.clientapp.utils.Utils;
 
 public class LoginActivity extends Activity {
 	private String TAG = "LoginActivity";
@@ -47,17 +47,31 @@ public class LoginActivity extends Activity {
 			rmbUser = chbRememberUser.isChecked();
 			rmbIP = chbRememberIP.isChecked();
 
-			if (saveInfo(username, password, serverip, rmbUser, rmbIP)) {
-				Log.d(TAG, "save success");
+			if ((username != "") && (password != "") && (serverip != "")) {
+				if (saveInfo(username, password, serverip, rmbUser, rmbIP)) {
+					Log.d(TAG, "save success");
+				}
+
+				// 将服务器保存至全局变量中
+				ClientApp clientApp = (ClientApp) getApplication();
+				clientApp.setServerIP(serverip);
+
+				Intent intent = new Intent(mContext, MainActivity.class);
+				startActivity(intent);
+				LoginActivity.this.finish();
+			} else {
+				new AlertDialog.Builder(mContext)
+						.setTitle(R.string.tishi)
+						.setMessage(R.string.edittext_null)
+						.setNegativeButton(R.string.ok,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+									}
+								}).create().show();
 			}
-
-			// 将服务器保存至全局变量中
-			ClientApp clientApp = (ClientApp) getApplication();
-			clientApp.setServerIP(serverip);
-
-			Intent intent = new Intent(mContext, MainActivity.class);
-			startActivity(intent);
-			LoginActivity.this.finish();
 		}
 	};
 

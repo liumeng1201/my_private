@@ -28,6 +28,8 @@ import android.widget.SeekBar;
 import com.lm.clientapp.pushnotification.ServiceManager;
 import com.lm.clientapp.utils.Utils;
 import com.lm.clientapp.videoplay.Player;
+import com.lm.clientapp.videoplay.SeekBarChangeEvent;
+import com.lm.clientapp.videoplay.VideoPlayControlEvent;
 
 public class MainActivity extends Activity {
 	private String LOGTAG = "MainActivity";
@@ -69,8 +71,6 @@ public class MainActivity extends Activity {
 		content_WebView = (WebView) findViewById(R.id.content_webview);
 		initWebView(content_WebView);
 
-		// video_surfaceview = (SurfaceView)
-		// findViewById(R.id.video_surfaceview);
 		video_surfaceview_content = (FrameLayout) findViewById(R.id.video_surfaceview_content);
 		content_Video = (FrameLayout) findViewById(R.id.content_video);
 		video_control = (RelativeLayout) findViewById(R.id.video_control);
@@ -86,7 +86,6 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				String url = edtInputUrl.getText().toString();
 				setContent(url);
-				// content_WebView.loadUrl(url);
 			}
 		});
 
@@ -106,8 +105,9 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
 
-				// 接收到服务器端推动的信息之后更新内容
-				if (msg.what == Utils.REFRESH_CONTENT) {
+				switch (msg.what) {
+				case Utils.REFRESH_CONTENT:
+					// 接收到服务器端推动的信息之后更新内容
 					Map map = (Map) msg.obj;
 					Log.d(LOGTAG, "notificationId="
 							+ map.get("notificationId").toString());
@@ -121,7 +121,12 @@ public class MainActivity extends Activity {
 							+ map.get("uri").toString());
 
 					setContent(map.get("message").toString());
-					// content_WebView.loadUrl(map.get("message").toString());
+					break;
+				case Utils.SHOW_WEB_VIEW:
+					showWebView();
+					break;
+				default:
+					break;
 				}
 			}
 		};
@@ -233,56 +238,20 @@ public class MainActivity extends Activity {
 		content_WebView.setVisibility(View.GONE);
 		content_Video.setVisibility(View.VISIBLE);
 		video_control.setVisibility(View.VISIBLE);
-		video_seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent());
-		video_btnpause.setOnClickListener(new VideoPlayControlEvent(url));
-		content_video_close.setOnClickListener(new VideoPlayControlEvent(url));
 
 		// 每次播放视频时均重新创建一个surfaceview来使用
 		video_surfaceview = new SurfaceView(mContext);
 		video_surfaceview_content.addView(video_surfaceview,
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		video_player = new Player(video_surfaceview, video_seekbar);
+		video_seekbar.setOnSeekBarChangeListener(new SeekBarChangeEvent(
+				video_player));
+		video_btnpause.setOnClickListener(new VideoPlayControlEvent(mHandler,
+				url, video_player));
+		content_video_close.setOnClickListener(new VideoPlayControlEvent(
+				mHandler, url, video_player));
 
 		video_player.playUrl(url);
 	}
 
-	class VideoPlayControlEvent implements OnClickListener {
-		private String url;
-
-		VideoPlayControlEvent(String url) {
-			this.url = url;
-		}
-
-		@Override
-		public void onClick(View view) {
-			if (view == video_btnpause) {
-				video_player.pause();
-			} else if (view == content_video_close) {
-				showWebView();
-				// video_surfaceview = null;
-			}
-		}
-	}
-
-	class SeekBarChangeEvent implements SeekBar.OnSeekBarChangeListener {
-		int progress;
-
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
-			// 原本是(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
-			this.progress = progress * video_player.mediaPlayer.getDuration()
-					/ seekBar.getMax();
-		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-		}
-
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-			// seekTo()的参数是相对与影片时间的数字，而不是与seekBar.getMax()相对的数字
-			video_player.mediaPlayer.seekTo(progress);
-		}
-	}
 }

@@ -15,6 +15,7 @@ public class Utils {
 	public static final String SEND_RECEIVER_MESSAGE = "com.lm.clientapp.action.sendReceiverMessage";
 	
 	public static final int REFRESH_CONTENT = 1000;
+	public static final int SHOW_WEB_VIEW = 1011;
 	
 	// 判断flashplayer是否已经安装
 	public static boolean checkIfFlashPlayerInstall(Context context) {
