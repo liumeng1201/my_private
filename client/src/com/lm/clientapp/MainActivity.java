@@ -3,7 +3,6 @@ package com.lm.clientapp;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
@@ -12,7 +11,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,13 +19,16 @@ import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.lm.clientapp.listtree.TreeBtnOnClickListener;
 import com.lm.clientapp.pushnotification.ServiceManager;
 import com.lm.clientapp.utils.MyDialog;
 import com.lm.clientapp.utils.Utils;
@@ -39,10 +40,17 @@ public class MainActivity extends Activity {
 	private String LOGTAG = "MainActivity";
 	private Context mContext;
 
-	private WebView content_WebView;
-	private EditText edtInputUrl;
-	private Button btnLoadUrl;
+	private ImageView user_avatar;
+	private TextView user_name;
+	private TextView user_class;
 	private ImageButton btnSettings;
+
+	private Button tree_btn1;
+	private Button tree_btn2;
+	private ListView tree_list1;
+	private ListView tree_list2;
+
+	private WebView content_WebView;
 
 	private FrameLayout content_Video;
 	private SurfaceView video_surfaceview;
@@ -72,6 +80,13 @@ public class MainActivity extends Activity {
 
 	// 初始化各个组件实例及各个变量
 	private void init() {
+		user_avatar = (ImageView) findViewById(R.id.userinfo_useravatar);
+		user_name = (TextView) findViewById(R.id.userinfo_username);
+		user_class = (TextView) findViewById(R.id.userinfo_userclass);
+		setUserInfo();
+
+		initTreeLayout();
+
 		content_WebView = (WebView) findViewById(R.id.content_webview);
 		initWebView(content_WebView);
 
@@ -82,22 +97,10 @@ public class MainActivity extends Activity {
 		video_btnpause = (Button) findViewById(R.id.video_btnpause);
 		content_video_close = (Button) findViewById(R.id.content_video_close);
 
-		edtInputUrl = (EditText) findViewById(R.id.inputurl);
-		btnLoadUrl = (Button) findViewById(R.id.loadurl);
-		btnLoadUrl.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				String url = edtInputUrl.getText().toString();
-				setContent(url);
-			}
-		});
-
 		btnSettings = (ImageButton) findViewById(R.id.userinfo_setting);
 		btnSettings.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				// 跳转至消息推送设置界面
 				ServiceManager.viewNotificationSettings(mContext);
 			}
@@ -106,7 +109,6 @@ public class MainActivity extends Activity {
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				// TODO Auto-generated method stub
 				super.handleMessage(msg);
 
 				switch (msg.what) {
@@ -136,9 +138,19 @@ public class MainActivity extends Activity {
 		};
 	}
 
+	// 初始化tree_layout布局
+	private void initTreeLayout() {
+		tree_btn1 = (Button) findViewById(R.id.tree_btn1);
+		tree_btn2 = (Button) findViewById(R.id.tree_btn2);
+		tree_list1 = (ListView) findViewById(R.id.tree_listview1);
+		tree_list2 = (ListView) findViewById(R.id.tree_listview2);
+		
+		tree_btn1.setOnClickListener(new TreeBtnOnClickListener());
+		tree_btn2.setOnClickListener(new TreeBtnOnClickListener());
+	}
+
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		if (serviceManager != null) {
 			// 退出程序时停止接收推送的消息
@@ -155,7 +167,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			MyDialog dialog = new MyDialog(mContext);
 			dialog.setMessage(R.string.exit);
@@ -163,14 +174,13 @@ public class MainActivity extends Activity {
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
+							dialog.dismiss();
 						}
 					});
 			dialog.setPositiveButton(R.string.ok,
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
 							MainActivity.this.finish();
 						}
 					});
@@ -277,4 +287,7 @@ public class MainActivity extends Activity {
 		video_player.playUrl(url);
 	}
 
+	private void setUserInfo() {
+		// TODO 获取网络资源之后设置用户信息
+	}
 }

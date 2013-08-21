@@ -1,27 +1,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tree_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
+    android:background="@color/tree_layout_bg"
     android:orientation="horizontal" >
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="3dp"
         android:orientation="vertical" >
 
         <Button
             android:id="@+id/tree_btn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/listbtn_selected"
             android:text="btn1" />
 
         <Button
             android:id="@+id/tree_btn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/listbtn"
             android:text="btn2" />
     </LinearLayout>
-    
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginTop="3dp" >
+
+        <ListView
+            android:id="@+id/tree_listview1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/listview" />
+
+        <ListView
+            android:id="@+id/tree_listview2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/listview" />
+    </FrameLayout>
 
 </LinearLayout>

@@ -16,5 +16,10 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+    <color name="listbtn">#E5E5E5</color>
+    <color name="listbtn_selected">#FFFFFF</color>
+    <color name="tree_layout_bg">#E5E5E5</color>
+    <color name="listview">#FFFFFF</color>
 
 </resources>

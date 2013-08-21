@@ -30,7 +30,6 @@ public class APNReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO Auto-generated method stub
 		notificationId = intent.getStringExtra(Constants.NOTIFICATION_ID);
 		apiKey = intent.getStringExtra(Constants.NOTIFICATION_API_KEY);
 		title = intent.getStringExtra(Constants.NOTIFICATION_TITLE);

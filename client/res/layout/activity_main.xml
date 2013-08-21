@@ -63,18 +63,10 @@
             android:layout_margin="5dp"
             android:layout_weight="5" >
 
-            <EditText
-                android:id="@+id/inputurl"
+            <include
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="http://192.168.1.108:8888/webDemo/test/test.swf" />
-
-            <Button
-                android:id="@+id/loadurl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="95dp"
-                android:text="Load Url" />
+                android:layout_height="match_parent"
+                layout="@layout/tree_layout" />
         </FrameLayout>
 
         <!-- 右侧内容区域layout -->
@@ -94,6 +86,7 @@
                 android:layout_height="match_parent" />
 
             <!-- 视频显示layout -->
+
             <FrameLayout
                 android:id="@+id/content_video"
                 android:layout_width="match_parent"
@@ -105,15 +98,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <!--
-                     <SurfaceView
-                    android:id="@+id/video_surfaceview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-                -->
-
-
                 <!-- 视频播放控制layout -->
+
                 <RelativeLayout
                     android:id="@+id/video_control"
                     android:layout_width="match_parent"

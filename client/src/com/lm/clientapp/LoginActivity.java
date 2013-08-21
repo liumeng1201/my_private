@@ -41,7 +41,6 @@ public class LoginActivity extends Activity {
 	private OnClickListener loginClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			String username = edtUsername.getText().toString();
 			String password = edtPassword.getText().toString();
 			String serverip = edtServerIP.getText().toString();
@@ -57,7 +56,7 @@ public class LoginActivity extends Activity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// TODO Auto-generated method stub
+								dialog.dismiss();
 							}
 						});
 				dialog.show();
@@ -79,7 +78,6 @@ public class LoginActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
@@ -106,7 +104,6 @@ public class LoginActivity extends Activity {
 		btnCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				LoginActivity.this.finish();
 			}
 		});
@@ -171,7 +168,6 @@ public class LoginActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
 						if (Utils.copyApkFromAssets(mContext,
 								"flashplayer.apk", Environment
 										.getExternalStorageDirectory()
@@ -192,7 +188,7 @@ public class LoginActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
+						dialog.dismiss();
 					}
 				});
 	}
