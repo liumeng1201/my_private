@@ -26,5 +26,89 @@
     <string name="fpidialog_install">未检测到FlashPlayer，点击“确定”安装</string>
     <string name="edittext_null">用户名、密码、ServerIP不能为空</string>
     <string name="exit">确定要退出?</string>
+    
+    <string-array name="province">
+        <item >北京</item>
+        <item >上海</item>
+        <item >天津</item>
+        <item >重庆</item>
+    </string-array>
+    <string-array name="beijing">
+        <item >北京</item>
+        <item >海淀</item>
+        <item >朝阳</item>
+        <item >顺义</item>
+        <item >怀柔</item>
+    </string-array>
+    <string-array name="shanghai">
+        <item >上海</item>
+        <item >闵行</item>
+        <item >宝山</item>
+        <item >嘉定</item>
+        <item >浦东</item>
+    </string-array>
+    <string-array name="tianjing">
+        <item >天津</item>
+        <item >武清</item>
+        <item >宝坻</item>
+        <item >东丽</item>
+        <item >西青</item>
+    </string-array>
+    <string-array name="chongqing">
+        <item >重庆</item>
+        <item >永川</item>
+        <item >合川</item>
+        <item >南川</item>
+        <item >江津</item>
+    </string-array>
+    <string-array name="beijing_des">
+        <item >北京aaa</item>
+        <item >海淀aaa</item>
+        <item >朝阳aaa</item>
+        <item >顺义aaa</item>
+        <item >怀柔aaa</item>
+    </string-array>
+    <string-array name="shanghai_des">
+        <item >上海bbb</item>
+        <item >闵行bbb</item>
+        <item >宝山bbb</item>
+        <item >嘉定bbb</item>
+        <item >浦东bbb</item>
+    </string-array>
+    <string-array name="tianjing_des">
+        <item >天津bbb</item>
+        <item >武清bbb</item>
+        <item >宝坻bbb</item>
+        <item >东丽bbb</item>
+        <item >西青bbb</item>
+    </string-array>
+    <string-array name="chongqing_des">
+        <item >重庆bbb</item>
+        <item >永川bbb</item>
+        <item >合川bbb</item>
+        <item >南川bbb</item>
+        <item >江津bbb</item>
+    </string-array>
+    
+    <string-array name="fruit">
+        <item>apple</item>
+        <item>banana</item>
+    </string-array>
+    <string-array name="apple">
+        <item >green apple</item>
+        <item>red apple</item>
+    </string-array>
+    <string-array name="banana">
+        <item>yellow banana</item>
+        <item>green banana</item>
+    </string-array>
+    <string-array name="apple_des">
+        <item >green apple aaa</item>
+        <item>red apple aaa</item>
+    </string-array>
+    <string-array name="banana_des">
+        <item>yellow banana bbb</item>
+        <item>green banana bbb</item>
+    </string-array>
 
 </resources>

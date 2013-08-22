@@ -3,6 +3,7 @@ package com.lm.clientapp.listtree;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,15 @@ public class ExpandeAdapter extends BaseExpandableListAdapter {
 		}
 		ChildViewHolder holder = new ChildViewHolder();
 		holder.mIcon = (ImageView) convertView.findViewById(R.id.item_img);
-		holder.mIcon.setImageBitmap(ImageUtils.getRoundCornerBitmap(
-				getChild(groupPosition, childPosition).getIcon(), 10));
+		if (getChild(groupPosition, childPosition).getIcon() != null) {
+
+			holder.mIcon.setImageBitmap(ImageUtils.getRoundCornerBitmap(
+					getChild(groupPosition, childPosition).getIcon(), 10));
+		} else {
+			holder.mIcon.setImageBitmap(ImageUtils.getRoundCornerBitmap(
+					ImageUtils.drawable2Bitmap(mContext.getResources()
+							.getDrawable(R.drawable.ic_launcher)), 10));
+		}
 		holder.mName = (TextView) convertView.findViewById(R.id.item_name);
 		holder.mName.setText(getChild(groupPosition, childPosition).getName());
 		holder.mDetail = (TextView) convertView.findViewById(R.id.item_detail);

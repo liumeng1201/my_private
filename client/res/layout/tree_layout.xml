@@ -37,17 +37,18 @@
         android:layout_marginRight="3dp"
         android:layout_marginTop="3dp" >
 
-        <ListView
+        <ExpandableListView
             android:id="@+id/tree_listview1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/listview" />
 
-        <ListView
+        <ExpandableListView
             android:id="@+id/tree_listview2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/listview" />
+            android:background="@color/listview"
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

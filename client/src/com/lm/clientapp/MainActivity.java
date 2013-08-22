@@ -1,5 +1,7 @@
 package com.lm.clientapp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -19,15 +21,17 @@ import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.lm.clientapp.listtree.ExpandeAdapter;
+import com.lm.clientapp.listtree.ListItem;
 import com.lm.clientapp.listtree.TreeBtnOnClickListener;
 import com.lm.clientapp.pushnotification.ServiceManager;
 import com.lm.clientapp.utils.MyDialog;
@@ -40,25 +44,44 @@ public class MainActivity extends Activity {
 	private String LOGTAG = "MainActivity";
 	private Context mContext;
 
+	// 学生头像
 	private ImageView user_avatar;
+	// 学生名
 	private TextView user_name;
+	// 学生班级
 	private TextView user_class;
+	// 设置按钮
 	private ImageButton btnSettings;
 
 	private Button tree_btn1;
 	private Button tree_btn2;
-	private ListView tree_list1;
-	private ListView tree_list2;
+	private ExpandableListView tree_list1;
+	private ExpandableListView tree_list2;
+	private ExpandeAdapter tree_list_adapter1;
+	private ExpandeAdapter tree_list_adapter2;
+	private String[] groups1;
+	private List<List<ListItem>> list1;
+	private String[] groups2;
+	private List<List<ListItem>> list2;
 
+	// 用来显示swf/图片的webview
 	private WebView content_WebView;
 
+	// 用来放置视频播放及控制按钮的布局
 	private FrameLayout content_Video;
+	// 用来显示视频
 	private SurfaceView video_surfaceview;
+	// 用来放置surfaceview的容器
 	private FrameLayout video_surfaceview_content;
+	// 视频播放控制
 	private RelativeLayout video_control;
+	// 视频播放进度条
 	private SeekBar video_seekbar;
+	// 视频播放暂停按钮
 	private Button video_btnpause;
+	// 关闭视频按钮
 	private Button content_video_close;
+	// 视频播放器类实例
 	private Player video_player;
 
 	// 接收推送消息服务的manager
@@ -142,11 +165,46 @@ public class MainActivity extends Activity {
 	private void initTreeLayout() {
 		tree_btn1 = (Button) findViewById(R.id.tree_btn1);
 		tree_btn2 = (Button) findViewById(R.id.tree_btn2);
-		tree_list1 = (ListView) findViewById(R.id.tree_listview1);
-		tree_list2 = (ListView) findViewById(R.id.tree_listview2);
+		tree_list1 = (ExpandableListView) findViewById(R.id.tree_listview1);
+		tree_list2 = (ExpandableListView) findViewById(R.id.tree_listview2);
+
+		String[] groups1 = getResources().getStringArray(R.array.province);
+		int[] province = new int[] { R.array.beijing, R.array.shanghai,
+				R.array.tianjing, R.array.chongqing };
+		int[] province_des = new int[] { R.array.beijing_des,
+				R.array.shanghai_des, R.array.tianjing_des,
+				R.array.chongqing_des };
+		String[] groups2 = getResources().getStringArray(R.array.fruit);
+		int[] fruit = new int[] { R.array.apple, R.array.banana };
+		int[] fruit_des = new int[] { R.array.apple_des, R.array.banana_des };
+		list1 = initData(province, province_des);
+		list2 = initData(fruit, fruit_des);
+
+		tree_list_adapter1 = new ExpandeAdapter(mContext, groups1, list1);
+		tree_list_adapter2 = new ExpandeAdapter(mContext, groups2, list2);
 		
-		tree_btn1.setOnClickListener(new TreeBtnOnClickListener());
-		tree_btn2.setOnClickListener(new TreeBtnOnClickListener());
+		tree_list1.setAdapter(tree_list_adapter1);
+		tree_list2.setAdapter(tree_list_adapter2);
+
+		tree_btn1.setOnClickListener(new TreeBtnOnClickListener(mContext,
+				tree_btn1, tree_btn2, tree_list1, tree_list2));
+		tree_btn2.setOnClickListener(new TreeBtnOnClickListener(mContext,
+				tree_btn1, tree_btn2, tree_list1, tree_list2));
+	}
+
+	private List<List<ListItem>> initData(int[] grouparray, int[] grouparray_des) {
+		List<List<ListItem>> data = new ArrayList<List<ListItem>>();
+		for (int i = 0; i < grouparray.length; i++) {
+			List<ListItem> list = new ArrayList<ListItem>();
+			String[] childs = getResources().getStringArray(grouparray[i]);
+			String[] details = getResources().getStringArray(grouparray_des[i]);
+			for (int j = 0; j < childs.length; j++) {
+				ListItem item = new ListItem(null, childs[j], details[j]);
+				list.add(item);
+			}
+			data.add(list);
+		}
+		return data;
 	}
 
 	@Override
