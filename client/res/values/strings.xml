@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Version 1.0</string>
     
-    <string name="hello">Hello Android, DemoAppActivity!</string>
+    <string name="hello">Welcome to use!</string>
     <string name="settings">Settings</string>
     
     <string name="title_login">登录</string>
@@ -26,6 +26,10 @@
     <string name="fpidialog_install">未检测到FlashPlayer，点击“确定”安装</string>
     <string name="edittext_null">用户名、密码、ServerIP不能为空</string>
     <string name="exit">确定要退出?</string>
+    
+    <string name="loginUrl">http://180.97.80.10</string>
+    <string name="user_error">用户名或密码错误</string>
+    <string name="net_error">网络链接错误</string>
     
     <string-array name="province">
         <item >北京</item>
