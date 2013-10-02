@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 
 @SuppressLint("NewApi")
 public class flashtest extends Activity {
-	Button btn, btnpause = null;
+	Button btn = null;
 	Handler mHandler = new Handler();
 	WebView webview = null;
 	EditText ip;
@@ -26,7 +26,6 @@ public class flashtest extends Activity {
 		setContentView(R.layout.test);
 
 		btn = (Button) findViewById(R.id.testbtnplay);
-		btnpause = (Button) findViewById(R.id.testbtnpause);
 
 		ip = (EditText) findViewById(R.id.testinput);
 
@@ -36,14 +35,16 @@ public class flashtest extends Activity {
 		(webview.getSettings()).setPluginState(PluginState.ON);
 		webview.setWebChromeClient(new WebChromeClient());
 		webview.addJavascriptInterface(new CallJava(), "CallJava");
+//		webview.loadUrl("file:///android_asset/sample/Console.html");
+		webview.loadUrl("http://192.168.1.106:10000/flow/console/Console.html");
 
 		btn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 //				for (int i = 0; i < 2; i++) {
-					webview.loadUrl("file:///android_asset/sample/tt.html");
-					String message = ip.getText().toString();
-					webview.loadUrl("javascript:initFlash('" + "2w3" + "')");
+//					webview.loadUrl("file:///android_asset/sample/tt.html");
+//					String message = ip.getText().toString();
+					webview.loadUrl("javascript:setValue('" + "1" + "')");
 //				}
 			}
 		});
