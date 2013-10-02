@@ -6,6 +6,8 @@ import android.app.Application;
 public class ClientApp extends Application {
 	// 全局变量ServerIP
 	private String serverIP;
+	// 全局变量userId
+	private String userId;
 
 	public String getServerIP() {
 		return serverIP;
@@ -13,5 +15,13 @@ public class ClientApp extends Application {
 
 	public void setServerIP(String serverip) {
 		this.serverIP = serverip;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userid) {
+		this.userId = userid;
 	}
 }

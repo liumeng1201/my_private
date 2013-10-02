@@ -33,6 +33,8 @@ import com.lm.clientapp.utils.Utils;
 public class LoginActivity extends Activity {
 	private String TAG = "LoginActivity";
 
+	// 存放全局变量
+	ClientApp clientApp;
 	// 登录、取消按钮
 	private Button btnLogin, btnCancel;
 	// 用户名、密码、服务器IP输入框
@@ -92,7 +94,9 @@ public class LoginActivity extends Activity {
 				dialog.show();
 			} else {
 				// 用户登陆操作http请求地址
-				final String url = getResources().getString(R.string.loginUrl);
+				// login action : http://ip:8080/android/androidLogin.action
+				final String url = "http://" + serverip
+						+ ":8080/android/androidLogin.action";
 				// 用户登录操作http传输数据
 				final List<NameValuePair> datas = new ArrayList<NameValuePair>();
 				// 添加数据
@@ -113,13 +117,13 @@ public class LoginActivity extends Activity {
 								Log.d(TAG, "save success");
 							}
 
-							// 将服务器保存至全局变量中
-							ClientApp clientApp = (ClientApp) getApplication();
+							// 将服务器IP保存至全局变量中
 							clientApp.setServerIP(serverip);
 
 							// 启动主界面Activity
 							Intent intent = new Intent(mContext,
 									MainActivity.class);
+							intent.putExtra("userid", clientApp.getUserId());
 							startActivity(intent);
 
 							// 取消登陆提示进度条对话框
@@ -149,6 +153,8 @@ public class LoginActivity extends Activity {
 
 	// 初始化各个组件实例
 	private void init() {
+		clientApp = (ClientApp) getApplication();
+
 		btnLogin = (Button) findViewById(R.id.btn_login);
 		btnCancel = (Button) findViewById(R.id.btn_cancel);
 		edtUsername = (EditText) findViewById(R.id.input_username);
@@ -156,6 +162,8 @@ public class LoginActivity extends Activity {
 		edtServerIP = (EditText) findViewById(R.id.input_serverip);
 		chbRememberUser = (CheckBox) findViewById(R.id.chb_rememberuser);
 		chbRememberIP = (CheckBox) findViewById(R.id.chb_rememberip);
+		loginDialog = new ProgressDialog(mContext);
+		loginDialog.setMessage(getResources().getString(R.string.login_tishi));
 
 		initfpiDialog();
 
@@ -181,7 +189,7 @@ public class LoginActivity extends Activity {
 			// 根据返回的数据获取用户ID
 			String userId = getUserIdFromResult(result);
 			// 验证用户身份
-			if ("null".equals(userId)) {
+			if (("null".equals(userId)) || ("0".equals(userId))) {
 				// 验证失败
 				mHandler.post(new Runnable() {
 					@Override
@@ -193,6 +201,8 @@ public class LoginActivity extends Activity {
 				return false;
 			} else {
 				// 验证成功
+				// 保存userId到全局变量中
+				clientApp.setUserId(userId);
 				return true;
 			}
 		} else {

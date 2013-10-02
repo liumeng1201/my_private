@@ -7,6 +7,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lm.clientapp.listtree.ExpandeAdapter;
 import com.lm.clientapp.listtree.ListItem;
@@ -95,6 +97,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext = MainActivity.this;
+
+		Intent intent = getIntent();
+		Toast.makeText(mContext, intent.getStringExtra("userid"),
+				Toast.LENGTH_LONG).show();
 
 		init();
 		startAPNService();
@@ -182,7 +188,7 @@ public class MainActivity extends Activity {
 
 		tree_list_adapter1 = new ExpandeAdapter(mContext, groups1, list1);
 		tree_list_adapter2 = new ExpandeAdapter(mContext, groups2, list2);
-		
+
 		tree_list1.setAdapter(tree_list_adapter1);
 		tree_list2.setAdapter(tree_list_adapter2);
 

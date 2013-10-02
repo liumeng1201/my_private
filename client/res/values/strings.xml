@@ -27,7 +27,8 @@
     <string name="edittext_null">用户名、密码、ServerIP不能为空</string>
     <string name="exit">确定要退出?</string>
     
-    <string name="loginUrl">http://180.97.80.10</string>
+    <string name="loginAction">/android/androidLogin.action</string>
+    <string name="login_tishi">登录中，请稍候...</string>
     <string name="user_error">用户名或密码错误</string>
     <string name="net_error">网络链接错误</string>
     
