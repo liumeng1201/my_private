@@ -1,8 +1,17 @@
 package com.lm.clientapp;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +32,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageButton;
@@ -32,10 +42,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lm.clientapp.listtree.ExpandeAdapter;
-import com.lm.clientapp.listtree.ListItem;
-import com.lm.clientapp.listtree.TreeBtnOnClickListener;
+import com.lm.clientapp.listtree.SimpleExpandeAdapter;
+import com.lm.clientapp.listtree.SimpleListItem;
+import com.lm.clientapp.model.CourseItem;
+import com.lm.clientapp.model.PushItem;
 import com.lm.clientapp.pushnotification.ServiceManager;
+import com.lm.clientapp.tools.CourseHandler;
+import com.lm.clientapp.utils.HttpTool;
 import com.lm.clientapp.utils.MyDialog;
 import com.lm.clientapp.utils.Utils;
 import com.lm.clientapp.videoplay.Player;
@@ -45,6 +58,7 @@ import com.lm.clientapp.videoplay.VideoPlayControlEvent;
 public class MainActivity extends Activity {
 	private String LOGTAG = "MainActivity";
 	private Context mContext;
+	private ClientApp clientApp;
 
 	// 学生头像
 	private ImageView user_avatar;
@@ -56,15 +70,14 @@ public class MainActivity extends Activity {
 	private ImageButton btnSettings;
 
 	private Button tree_btn1;
-	private Button tree_btn2;
 	private ExpandableListView tree_list1;
-	private ExpandableListView tree_list2;
-	private ExpandeAdapter tree_list_adapter1;
-	private ExpandeAdapter tree_list_adapter2;
-	private String[] groups1;
-	private List<List<ListItem>> list1;
-	private String[] groups2;
-	private List<List<ListItem>> list2;
+	private SimpleExpandeAdapter tree_list_adapter1;
+	/*
+	 * private Button tree_btn2; private ExpandableListView tree_list2; private
+	 * ExpandeAdapter tree_list_adapter2; private String[] groups1; private
+	 * List<List<ListItem>> list1; private String[] groups2; private
+	 * List<List<ListItem>> list2;
+	 */
 
 	// 用来显示swf/图片的webview
 	private WebView content_WebView;
@@ -97,9 +110,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext = MainActivity.this;
+		clientApp = (ClientApp) getApplication();
 
 		Intent intent = getIntent();
-		Toast.makeText(mContext, intent.getStringExtra("userid"),
+		final String userid = intent.getStringExtra("userid");
+		Toast.makeText(mContext, "UserID = " + intent.getStringExtra("userid"),
 				Toast.LENGTH_LONG).show();
 
 		init();
@@ -114,7 +129,7 @@ public class MainActivity extends Activity {
 		user_class = (TextView) findViewById(R.id.userinfo_userclass);
 		setUserInfo();
 
-		initTreeLayout();
+		loadTreeLayout();
 
 		content_WebView = (WebView) findViewById(R.id.content_webview);
 		initWebView(content_WebView);
@@ -143,19 +158,19 @@ public class MainActivity extends Activity {
 				switch (msg.what) {
 				case Utils.REFRESH_CONTENT:
 					// 接收到服务器端推动的信息之后更新内容
-					Map map = (Map) msg.obj;
-					Log.d(LOGTAG, "notificationId="
-							+ map.get("notificationId").toString());
-					Log.d(LOGTAG, "notificationApiKey="
-							+ map.get("apiKey").toString());
-					Log.d(LOGTAG, "notificationTitle="
-							+ map.get("title").toString());
-					Log.d(LOGTAG, "notificationMessage="
-							+ map.get("message").toString());
-					Log.d(LOGTAG, "notificationUri="
-							+ map.get("uri").toString());
+					PushItem pi = (PushItem) msg.obj;
+					Log.d(LOGTAG, "mode = " + pi.getCurrentMode()
+							+ " teacher = " + pi.getCurrentTeacher()
+							+ " course = " + pi.getCurrentCourse() + " case = "
+							+ pi.getCurrentCase());
+					Log.d(LOGTAG, "sourceName = "
+							+ pi.getCurrentCaseSource().getSourceName()
+							+ " sourceUrl = "
+							+ pi.getCurrentCaseSource().getSourceUrl()
+							+ " caseId = "
+							+ pi.getCurrentCaseSource().getCaseId());
 
-					setContent(map.get("message").toString());
+					// setContent(map.get("message").toString());
 					break;
 				case Utils.SHOW_WEB_VIEW:
 					showWebView();
@@ -167,50 +182,102 @@ public class MainActivity extends Activity {
 		};
 	}
 
-	// 初始化tree_layout布局
-	private void initTreeLayout() {
+	// 载入tree_layout布局
+	private void loadTreeLayout() {
 		tree_btn1 = (Button) findViewById(R.id.tree_btn1);
-		tree_btn2 = (Button) findViewById(R.id.tree_btn2);
 		tree_list1 = (ExpandableListView) findViewById(R.id.tree_listview1);
-		tree_list2 = (ExpandableListView) findViewById(R.id.tree_listview2);
 
-		String[] groups1 = getResources().getStringArray(R.array.province);
-		int[] province = new int[] { R.array.beijing, R.array.shanghai,
-				R.array.tianjing, R.array.chongqing };
-		int[] province_des = new int[] { R.array.beijing_des,
-				R.array.shanghai_des, R.array.tianjing_des,
-				R.array.chongqing_des };
-		String[] groups2 = getResources().getStringArray(R.array.fruit);
-		int[] fruit = new int[] { R.array.apple, R.array.banana };
-		int[] fruit_des = new int[] { R.array.apple_des, R.array.banana_des };
-		list1 = initData(province, province_des);
-		list2 = initData(fruit, fruit_des);
+		final String[] groups1 = { "当前课程" };
 
-		tree_list_adapter1 = new ExpandeAdapter(mContext, groups1, list1);
-		tree_list_adapter2 = new ExpandeAdapter(mContext, groups2, list2);
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				// String url =
+				// "http://192.168.1.104:8080/android/androidCourseStu.action";
+				String url = "http://" + clientApp.getServerIP()
+						+ getResources().getString(R.string.courseStuAction);
+				final List<NameValuePair> datas = new ArrayList<NameValuePair>();
+				datas.add(new BasicNameValuePair("stuid", clientApp.getUserId()));
+				List<CourseItem> list = getCourseList(url, datas);
+				List<List<SimpleListItem>> listgroup = new ArrayList<List<SimpleListItem>>();
+				List<SimpleListItem> lists = new ArrayList<SimpleListItem>();
+				for (CourseItem item : list) {
+					lists.add(new SimpleListItem(item.getCourseName()));
+				}
+				listgroup.add(lists);
+				tree_list_adapter1 = new SimpleExpandeAdapter(mContext,
+						groups1, listgroup);
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						// 将adapter与listview绑定以显示数据
+						tree_list1.setAdapter(tree_list_adapter1);
+					}
+				});
+			}
+		}.start();
 
-		tree_list1.setAdapter(tree_list_adapter1);
-		tree_list2.setAdapter(tree_list_adapter2);
+		tree_list1.setOnChildClickListener(new OnChildClickListener() {
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				// TODO Auto-generated method stub
+				Toast.makeText(
+						mContext,
+						"you click group: " + groupPosition + " child: "
+								+ childPosition, Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		});
 
-		tree_btn1.setOnClickListener(new TreeBtnOnClickListener(mContext,
-				tree_btn1, tree_btn2, tree_list1, tree_list2));
-		tree_btn2.setOnClickListener(new TreeBtnOnClickListener(mContext,
-				tree_btn1, tree_btn2, tree_list1, tree_list2));
+		/*
+		 * //第一个ExpandableListView String[] groups1 =
+		 * getResources().getStringArray(R.array.province); int[] province = new
+		 * int[] { R.array.beijing, R.array.shanghai, R.array.tianjing,
+		 * R.array.chongqing }; int[] province_des = new int[] {
+		 * R.array.beijing_des, R.array.shanghai_des, R.array.tianjing_des,
+		 * R.array.chongqing_des }; list1 =
+		 * TreeViewUtils.convertDataForListview(mContext, province,
+		 * province_des);
+		 * 
+		 * //第二个ExpandableListView tree_btn2 = (Button)
+		 * findViewById(R.id.tree_btn2); tree_list2 = (ExpandableListView)
+		 * findViewById(R.id.tree_listview2);
+		 * 
+		 * String[] groups2 = getResources().getStringArray(R.array.fruit);
+		 * int[] fruit = new int[] { R.array.apple, R.array.banana }; int[]
+		 * fruit_des = new int[] { R.array.apple_des, R.array.banana_des };
+		 * list2 = TreeViewUtils.convertDataForListview(mContext, fruit,
+		 * fruit_des);
+		 * 
+		 * tree_list_adapter2 = new ExpandeAdapter(mContext, groups2, list2);
+		 * tree_list2.setAdapter(tree_list_adapter2);
+		 * 
+		 * tree_btn1.setOnClickListener(new TreeBtnOnClickListener(mContext,
+		 * tree_btn1, tree_btn2, tree_list1, tree_list2));
+		 * tree_btn2.setOnClickListener(new TreeBtnOnClickListener(mContext,
+		 * tree_btn1, tree_btn2, tree_list1, tree_list2));
+		 */
 	}
 
-	private List<List<ListItem>> initData(int[] grouparray, int[] grouparray_des) {
-		List<List<ListItem>> data = new ArrayList<List<ListItem>>();
-		for (int i = 0; i < grouparray.length; i++) {
-			List<ListItem> list = new ArrayList<ListItem>();
-			String[] childs = getResources().getStringArray(grouparray[i]);
-			String[] details = getResources().getStringArray(grouparray_des[i]);
-			for (int j = 0; j < childs.length; j++) {
-				ListItem item = new ListItem(null, childs[j], details[j]);
-				list.add(item);
-			}
-			data.add(list);
+	// 解析获取的课程树列表xml信息
+	private List<CourseItem> getCourseList(String url, List<NameValuePair> datas) {
+		InputStream xmlStream = HttpTool.sendDataByPost(url, datas);
+		try {
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser parser = factory.newSAXParser();
+			XMLReader xmlreader = parser.getXMLReader();
+			CourseHandler handler = new CourseHandler();
+			xmlreader.setContentHandler(handler);
+			InputSource source = new InputSource(xmlStream);
+			xmlreader.parse(source);
+			List<CourseItem> items = handler.getCourseList();
+			return items;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		return data;
 	}
 
 	@Override

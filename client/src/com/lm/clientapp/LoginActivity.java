@@ -95,8 +95,8 @@ public class LoginActivity extends Activity {
 			} else {
 				// 用户登陆操作http请求地址
 				// login action : http://ip:8080/android/androidLogin.action
-				final String url = "http://" + serverip
-						+ ":8080/android/androidLogin.action";
+				final String url = "http://" + serverip + getResources().getString(R.string.loginAction);
+//						+ ":8080/android/androidLogin.action";
 				// 用户登录操作http传输数据
 				final List<NameValuePair> datas = new ArrayList<NameValuePair>();
 				// 添加数据

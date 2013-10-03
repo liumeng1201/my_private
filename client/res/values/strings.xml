@@ -27,11 +27,42 @@
     <string name="edittext_null">用户名、密码、ServerIP不能为空</string>
     <string name="exit">确定要退出?</string>
     
-    <string name="loginAction">/android/androidLogin.action</string>
+    <string name="loginAction">:8080/android/androidLogin.action</string>
+    <string name="courseStuAction">:8080/android/androidCourseStu.action</string>
+    <string name="courseTeaAction">:8080/android/androidCourseTea.action</string>
     <string name="login_tishi">登录中，请稍候...</string>
     <string name="user_error">用户名或密码错误</string>
     <string name="net_error">网络链接错误</string>
     
+	<!-- 用来与推送过来的字符串进行比较来判断是否含有相应的信息 -->
+    <string-array name="strcompare">
+		<!-- 学生id -->
+        <item>sid</item>
+        <!-- 当前课程流 -->
+        <item>a</item>
+        <!-- 当前老师 -->
+        <item>b</item>
+        <!-- 当前模式 -->
+        <item>c</item>
+        <!-- 当前案例 -->
+        <item>d</item>
+        <!-- sourceId -->
+        <item>e1</item>
+        <!-- sourceName -->
+        <item>e2</item>
+        <!-- sourceUrl -->
+        <item>e3</item>
+        <!-- mediaTypeId -->
+        <item>e4</item>
+        <!-- sourceTypeId -->
+        <item>e5</item>
+        <!-- seq -->
+        <item>e6</item>
+        <!-- caseId -->
+        <item>e7</item>
+    </string-array>
+    
+    <!-- 
     <string-array name="province">
         <item >北京</item>
         <item >上海</item>
@@ -115,5 +146,5 @@
         <item>yellow banana bbb</item>
         <item>green banana bbb</item>
     </string-array>
-
+	 -->
 </resources>
