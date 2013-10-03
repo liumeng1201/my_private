@@ -18,25 +18,6 @@
             
         <script type="text/javascript" src="swfobject.js"></script>
         <script type="text/javascript">
-        	    var swfVersionStr = "11.1.0";
-	            var xiSwfUrlStr = "playerProductInstall.swf";
-	            var flashvars = {};
-	            flashvars.FileName = filepath;
-	            var params = {};
-	            params.quality = "high";
-	            params.bgcolor = "#ffffff";
-	            params.allowscriptaccess = "sameDomain";
-	            params.allowfullscreen = "true";
-	            var attributes = {};
-	            attributes.id = "Console";
-	            attributes.name = "Console";
-	            attributes.align = "middle";
-	            swfobject.embedSWF(
-	                "Console.swf", "flashContent", 
-	                "100%", "100%", 
-	                swfVersionStr, xiSwfUrlStr, 
-	                flashvars, params, attributes);
-	            swfobject.createCSS("#flashContent", "display:block;text-align:left;");
 	            function initFlash(filepath) {
 		            var swfVersionStr = "11.1.0";
 		            var xiSwfUrlStr = "playerProductInstall.swf";
@@ -52,7 +33,7 @@
 		            attributes.name = "Console";
 		            attributes.align = "middle";
 		            swfobject.embedSWF(
-		                "Console.swf", "flashContent", 
+		                "exam.swf", "flashContent", 
 		                "100%", "100%", 
 		                swfVersionStr, xiSwfUrlStr, 
 		                flashvars, params, attributes);
