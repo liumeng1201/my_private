@@ -1,5 +1,6 @@
 package com.lm.clientapp;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -95,8 +99,9 @@ public class LoginActivity extends Activity {
 			} else {
 				// 用户登陆操作http请求地址
 				// login action : http://ip:8080/android/androidLogin.action
-				final String url = "http://" + serverip + getResources().getString(R.string.loginAction);
-//						+ ":8080/android/androidLogin.action";
+				final String url = "http://" + serverip
+						+ getResources().getString(R.string.loginAction);
+				// + ":8080/android/androidLogin.action";
 				// 用户登录操作http传输数据
 				final List<NameValuePair> datas = new ArrayList<NameValuePair>();
 				// 添加数据
@@ -117,13 +122,15 @@ public class LoginActivity extends Activity {
 								Log.d(TAG, "save success");
 							}
 
-							// 将服务器IP保存至全局变量中
+							// 将serverIP,userName保存至全局变量中
 							clientApp.setServerIP(serverip);
+							clientApp.setUserName(username);
 
 							// 启动主界面Activity
 							Intent intent = new Intent(mContext,
 									MainActivity.class);
 							intent.putExtra("userid", clientApp.getUserId());
+							intent.putExtra("userrealname", clientApp.getUserRealName());
 							startActivity(intent);
 
 							// 取消登陆提示进度条对话框
@@ -201,8 +208,14 @@ public class LoginActivity extends Activity {
 				return false;
 			} else {
 				// 验证成功
-				// 保存userId到全局变量中
+				String userRealName = getRealNameFromResult(result);
+				Bitmap userPortrait = getProfileImageFromResult(result);
+				int userTypeId = getUserTypeIdFromResult(result);
+				// 保存userId,userRealName,userPortrait到全局变量中
 				clientApp.setUserId(userId);
+				clientApp.setUserRealName(userRealName);
+				clientApp.setUserPortrait(userPortrait);
+				clientApp.setUserTypeId(userTypeId);
 				return true;
 			}
 		} else {
@@ -220,7 +233,51 @@ public class LoginActivity extends Activity {
 
 	// 从服务器返回的数据中获取用户ID
 	private String getUserIdFromResult(String result) {
-		return result;
+		if (result != null) {
+			String array[] = result.split("\\$");
+			return array[0];
+		} else {
+			return null;
+		}
+	}
+
+	// 从服务器返回的数据中获取用户真实名字
+	private String getRealNameFromResult(String result) {
+		String array[] = result.split("\\$");
+		return array[1];
+	}
+	
+	// 从服务器返回的数据中获取用户头像
+	private Bitmap getProfileImageFromResult(String result) {
+		String array[] = result.split("\\$");
+		// 用户头像对应的url
+		String portraits[] = (array[2].replace('\\', '/')).split("/");
+		// 转换为assets目录下对应的文件名
+		String portrait = portraits[1] + "/" + portraits[2] + "/"
+				+ portraits[3];
+		Bitmap image = null;
+		AssetManager am = getResources().getAssets();
+		try {
+			InputStream is = am.open(portrait);
+			image = BitmapFactory.decodeStream(is);
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			// 如果没有设置用户头像或用户头像为空则使用默认的用户头像
+			if (image == null) {
+				image = BitmapFactory.decodeResource(getResources(),
+						R.drawable.default_portrait);
+			}
+		}
+		return image;
+	}
+	
+	// 从服务器返回的数据中获取用户类型标识
+	private int getUserTypeIdFromResult(String result) {
+		String array[] = result.split("\\$");
+		// userTypeId对应的string
+		return Integer.parseInt(array[3]);
 	}
 
 	// 载入之前保存的用户名、密码、服务器IP信息

@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.PluginState;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -64,8 +65,6 @@ public class MainActivity extends Activity {
 	private ImageView user_avatar;
 	// 学生名
 	private TextView user_name;
-	// 学生班级
-	private TextView user_class;
 	// 设置按钮
 	private ImageButton btnSettings;
 
@@ -112,11 +111,6 @@ public class MainActivity extends Activity {
 		mContext = MainActivity.this;
 		clientApp = (ClientApp) getApplication();
 
-		Intent intent = getIntent();
-		final String userid = intent.getStringExtra("userid");
-		Toast.makeText(mContext, "UserID = " + intent.getStringExtra("userid"),
-				Toast.LENGTH_LONG).show();
-
 		init();
 		startAPNService();
 		initAPNReceiver();
@@ -126,7 +120,6 @@ public class MainActivity extends Activity {
 	private void init() {
 		user_avatar = (ImageView) findViewById(R.id.userinfo_useravatar);
 		user_name = (TextView) findViewById(R.id.userinfo_username);
-		user_class = (TextView) findViewById(R.id.userinfo_userclass);
 		setUserInfo();
 
 		loadTreeLayout();
@@ -170,7 +163,7 @@ public class MainActivity extends Activity {
 							+ " caseId = "
 							+ pi.getCurrentCaseSource().getCaseId());
 
-					// setContent(map.get("message").toString());
+					loadRes(pi);
 					break;
 				case Utils.SHOW_WEB_VIEW:
 					showWebView();
@@ -193,12 +186,20 @@ public class MainActivity extends Activity {
 			@Override
 			public void run() {
 				super.run();
-				// String url =
-				// "http://192.168.1.104:8080/android/androidCourseStu.action";
-				String url = "http://" + clientApp.getServerIP()
-						+ getResources().getString(R.string.courseStuAction);
+				String url = "http://" + clientApp.getServerIP();
 				final List<NameValuePair> datas = new ArrayList<NameValuePair>();
-				datas.add(new BasicNameValuePair("stuid", clientApp.getUserId()));
+				switch (clientApp.getUserTypeId()) {
+				case 10:
+					// 学生
+					datas.add(new BasicNameValuePair("stuid", clientApp.getUserId()));
+					url = url + getResources().getString(R.string.courseStuAction);
+					break;
+				case 20:
+					// 老师
+					datas.add(new BasicNameValuePair("teaid", clientApp.getUserId()));
+					url = url + getResources().getString(R.string.courseTeaAction);
+					break;
+				}
 				List<CourseItem> list = getCourseList(url, datas);
 				List<List<SimpleListItem>> listgroup = new ArrayList<List<SimpleListItem>>();
 				List<SimpleListItem> lists = new ArrayList<SimpleListItem>();
@@ -222,7 +223,7 @@ public class MainActivity extends Activity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-				// TODO Auto-generated method stub
+				// TODO 用户点击当前课程列表时需要进行的操作
 				Toast.makeText(
 						mContext,
 						"you click group: " + groupPosition + " child: "
@@ -294,6 +295,8 @@ public class MainActivity extends Activity {
 		}
 
 		stopVideoPlayer();
+
+		userLogout();
 	}
 
 	@Override
@@ -348,13 +351,14 @@ public class MainActivity extends Activity {
 		setting.setSupportZoom(true);
 		setting.setBuiltInZoomControls(true);
 
-		webview.setWebViewClient(new WebViewClient() {
-			// 在当前WebView中加载所有url
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				view.loadUrl(url);
-				return true;
-			}
-		});
+		webview.setWebChromeClient(new WebChromeClient());
+//		webview.setWebViewClient(new WebViewClient() {
+//			// 在当前WebView中加载所有url
+//			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//				view.loadUrl(url);
+//				return true;
+//			}
+//		});
 	}
 
 	// 设置内容区域要显示的内容
@@ -369,6 +373,108 @@ public class MainActivity extends Activity {
 		} else {
 			// 显示WebView
 			showWebView(url);
+		}
+	}
+	private void showRAFReader(final WebView wb, final String url) {
+		showWebView();
+		wb.loadUrl("file:///android_asset/sample/RAFReader.html");
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				wb.loadUrl("javascript:setParams('" + url + "')");
+			}
+		}.start();
+	}
+
+	private void showConsole(final WebView wb, final long caseId,
+			final long userId) {
+		showWebView();
+		wb.loadUrl("http://" + clientApp.getServerIP()
+				+ getResources().getString(R.string.consoleurl));
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				wb.loadUrl("javascript:setParams('" + userId + ","
+						+ getEngineIdByCaseId(caseId) + "')");
+			}
+		}.start();
+	}
+
+	private void showPaper(final WebView wb, final long caseId,
+			final long userId) {
+		showWebView();
+		wb.loadUrl("http://" + clientApp.getServerIP()
+				+ getResources().getString(R.string.paperurl));
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				wb.loadUrl("javascript:setParams('" + userId + ","
+						+ getEngineIdByCaseId(caseId) + "')");
+			}
+		}.start();
+	}
+
+	private void showFake(final WebView wb, final long userId) {
+		showWebView();
+		wb.loadUrl("http://" + clientApp.getServerIP()
+				+ getResources().getString(R.string.fakeurl));
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				wb.loadUrl("javascript:setParams('" + userId + "')");
+			}
+		}.start();
+	}
+
+	//根据推送的资源信息加载相应的内容
+	private void loadRes(PushItem pi) {
+		int mediaTypeId = pi.getCurrentCaseSource().getMediaTypeId();
+		long caseId = pi.getCurrentCaseSource().getCaseId();
+		String sourceUrl = pi.getCurrentCaseSource().getSourceUrl();
+		String sourceUrlLoad = "http://" + clientApp.getServerIP() + ":8080/"
+				+ sourceUrl;
+		switch (mediaTypeId) {
+		// TODO
+		/*
+		case rafReader:
+			showRAFReader(content_WebView, sourceUrlLoad);
+			break;
+		case console:
+			showConsole(content_WebView, caseId, Long.parseLong(clientApp.getUserId()));
+			break;
+		case paper:
+			showPaper(content_WebView, caseId, Long.parseLong(clientApp.getUserId()));
+			break;
+		case fake:
+			showFake(content_WebView, Long.parseLong(clientApp.getUserId()));
+			break;
+		*/
+		default:
+			break;
 		}
 	}
 
@@ -418,7 +524,41 @@ public class MainActivity extends Activity {
 		video_player.playUrl(url);
 	}
 
+	// 设置并显示用户个人信息
 	private void setUserInfo() {
-		// TODO 获取网络资源之后设置用户信息
+		user_name.setText(clientApp.getUserName() + ":"
+				+ clientApp.getUserRealName() + ":" + clientApp.getUserId());
+		user_avatar.setImageBitmap(clientApp.getUserPortrait());
+	}
+
+	// 通过caseId获取engineId
+	private long getEngineIdByCaseId(long caseId) {
+		long engineId = 0;
+		String url = "http://" + clientApp.getServerIP()
+				+ getResources().getString(R.string.getEngineIdAction);
+		List<NameValuePair> datas = new ArrayList<NameValuePair>();
+		datas.add(new BasicNameValuePair("caseId", String.valueOf(caseId)));
+		InputStream is = HttpTool.sendDataByPost(url, datas);
+		if (is != null) {
+			String result = HttpTool.convertStreamToString(is);
+			engineId = Long.parseLong(result);
+		}
+		return engineId;
+	}
+	
+	// 用户登出
+	private void userLogout() {
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				String url = "http://" + clientApp.getServerIP()
+						+ getResources().getString(R.string.logoutAction);
+				List<NameValuePair> datas = new ArrayList<NameValuePair>();
+				datas.add(new BasicNameValuePair("userId", clientApp
+						.getUserId()));
+				HttpTool.sendDataByPost(url, datas);
+			}
+		}.start();
 	}
 }

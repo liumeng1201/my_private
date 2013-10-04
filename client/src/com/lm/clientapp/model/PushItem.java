@@ -1,7 +1,6 @@
 package com.lm.clientapp.model;
 
 import java.util.List;
-import java.util.Map;
 
 public class PushItem {
 	// 推送学生列表
@@ -15,7 +14,6 @@ public class PushItem {
 	// 当前案例
 	private String currentCase;
 	// 当前caseSource表所对应的内容
-	// private List<Map<String, String>> currentCaseSource;
 	private CaseSourceItem caseSourceItem;
 
 	public void setStudentList(List<String> studentList) {
@@ -57,15 +55,6 @@ public class PushItem {
 	public String getCurrentCase() {
 		return currentCase;
 	}
-
-	// public void setCurrentCaseSource(List<Map<String, String>>
-	// currentCaseSource) {
-	// this.currentCaseSource = currentCaseSource;
-	// }
-	//
-	// public List<Map<String, String>> getCurrentCaseSource() {
-	// return currentCaseSource;
-	// }
 
 	public void setCurrentCaseSource(CaseSourceItem caseSourceItem) {
 		this.caseSourceItem = caseSourceItem;
