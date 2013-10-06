@@ -39,8 +39,8 @@ public class LoginActivity extends Activity {
 
 	// 存放全局变量
 	ClientApp clientApp;
-	// 登录、取消按钮
-	private Button btnLogin, btnCancel;
+	// 登录按钮
+	private Button btnLogin;
 	// 用户名、密码、服务器IP输入框
 	private EditText edtUsername, edtPassword, edtServerIP;
 	// 记住用户名密码、服务器IP复选框
@@ -98,10 +98,8 @@ public class LoginActivity extends Activity {
 				dialog.show();
 			} else {
 				// 用户登陆操作http请求地址
-				// login action : http://ip:8080/android/androidLogin.action
 				final String url = "http://" + serverip
 						+ getResources().getString(R.string.loginAction);
-				// + ":8080/android/androidLogin.action";
 				// 用户登录操作http传输数据
 				final List<NameValuePair> datas = new ArrayList<NameValuePair>();
 				// 添加数据
@@ -130,7 +128,8 @@ public class LoginActivity extends Activity {
 							Intent intent = new Intent(mContext,
 									MainActivity.class);
 							intent.putExtra("userid", clientApp.getUserId());
-							intent.putExtra("userrealname", clientApp.getUserRealName());
+							intent.putExtra("userrealname",
+									clientApp.getUserRealName());
 							startActivity(intent);
 
 							// 取消登陆提示进度条对话框
@@ -160,28 +159,21 @@ public class LoginActivity extends Activity {
 
 	// 初始化各个组件实例
 	private void init() {
-		clientApp = (ClientApp) getApplication();
+		clientApp = (ClientApp) getApplicationContext();
 
 		btnLogin = (Button) findViewById(R.id.btn_login);
-		btnCancel = (Button) findViewById(R.id.btn_cancel);
 		edtUsername = (EditText) findViewById(R.id.input_username);
 		edtPassword = (EditText) findViewById(R.id.input_password);
 		edtServerIP = (EditText) findViewById(R.id.input_serverip);
 		chbRememberUser = (CheckBox) findViewById(R.id.chb_rememberuser);
 		chbRememberIP = (CheckBox) findViewById(R.id.chb_rememberip);
 		loginDialog = new ProgressDialog(mContext);
+		loginDialog.setCancelable(false);
 		loginDialog.setMessage(getResources().getString(R.string.login_tishi));
 
 		initfpiDialog();
 
 		loadSavedInfo();
-
-		btnCancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LoginActivity.this.finish();
-			}
-		});
 
 		btnLogin.setOnClickListener(loginClickListener);
 	}
@@ -246,7 +238,7 @@ public class LoginActivity extends Activity {
 		String array[] = result.split("\\$");
 		return array[1];
 	}
-	
+
 	// 从服务器返回的数据中获取用户头像
 	private Bitmap getProfileImageFromResult(String result) {
 		String array[] = result.split("\\$");
@@ -272,7 +264,7 @@ public class LoginActivity extends Activity {
 		}
 		return image;
 	}
-	
+
 	// 从服务器返回的数据中获取用户类型标识
 	private int getUserTypeIdFromResult(String result) {
 		String array[] = result.split("\\$");

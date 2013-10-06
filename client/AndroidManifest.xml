@@ -5,19 +5,20 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="13"
         android:targetSdkVersion="15" />
 
     <application
         android:name="com.lm.clientapp.ClientApp"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon_128"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.lm.clientapp.LoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,15 +29,16 @@
             android:name="com.lm.clientapp.MainActivity"
             android:hardwareAccelerated="true"
             android:label="@string/title_study"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
         </activity>
         <activity android:name="com.lm.clientapp.APNActivity" />
-        <activity
-            android:name="com.lm.clientapp.pushnotification.NotificationDetailsActivity"
-            android:label="Notification Details" />
-        <activity
-            android:name="com.lm.clientapp.pushnotification.NotificationSettingsActivity"
-            android:label="Notification Settings" />
+        <!-- <activity -->
+        <!-- android:name="com.lm.clientapp.pushnotification.NotificationDetailsActivity" -->
+        <!-- android:label="Notification Details" /> -->
+        <!-- <activity -->
+        <!-- android:name="com.lm.clientapp.pushnotification.NotificationSettingsActivity" -->
+        <!-- android:label="Notification Settings" /> -->
 
         <service
             android:name="com.lm.clientapp.pushnotification.NotificationService"

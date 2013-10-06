@@ -3,6 +3,8 @@ package com.lm.clientapp;
 import android.app.Application;
 import android.graphics.Bitmap;
 
+import com.lm.clientapp.model.CourseItem;
+
 //用来保存全局变量的类
 public class ClientApp extends Application {
 	// 全局变量ServerIP
@@ -17,6 +19,8 @@ public class ClientApp extends Application {
 	private Bitmap userPortrait;
 	// 用类类型标识
 	private int userTypeId;
+	// 当前课程流信息
+	private CourseItem courseItem;
 
 	public String getServerIP() {
 		return serverIP;
@@ -64,5 +68,13 @@ public class ClientApp extends Application {
 
 	public void setUserTypeId(int userTypeId) {
 		this.userTypeId = userTypeId;
+	}
+
+	public CourseItem getCourseItem() {
+		return courseItem;
+	}
+
+	public void setCourseItem(CourseItem courseItem) {
+		this.courseItem = courseItem;
 	}
 }

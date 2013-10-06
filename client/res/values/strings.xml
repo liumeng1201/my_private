@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ClientApp</string>
+    <string name="app_name">银行实训系统</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Version 1.0</string>
     
@@ -13,13 +13,16 @@
     <string name="userclass">用户班级</string>
     <string name="ok">确定</string>
     
-    <string name="login_title">登录</string>
+    <string name="main_head_title">银行实训系统</string>
+    <string name="login_head_title">实训2013</string>
+    <string name="login_title">登&#160;&#160;&#160;&#160;&#160;&#160;录</string>
+    <string name="login">登录</string>
     <string name="username">用&#160;户&#160;名</string>
     <string name="password">密&#160;&#160;&#160;&#160;&#160;&#160;码</string>
     <string name="serverip">服务器IP</string>
     <string name="remember_user">记住用户名和密码</string>
     <string name="remember_ip">记住服务器IP</string>
-    <string name="login">登录</string>
+    <string name="login_btn">&#160;&#160;&#160;登&#160;&#160;&#160;录&#160;&#160;&#160;</string>
     <string name="cancel">取消</string>
     
     <string name="tishi">提示</string>
@@ -27,18 +30,21 @@
     <string name="edittext_null">用户名、密码、ServerIP不能为空</string>
     <string name="exit">确定要退出?</string>
     
-    <string name="loginAction">:8080/android/androidLogin.action</string>
-    <string name="logoutAction">:8080/android/androidLogout.action</string>
-    <string name="courseStuAction">:8080/android/androidCourseStu.action</string>
-    <string name="courseTeaAction">:8080/android/androidCourseTea.action</string>
+    <string name="server_port">:8080/</string>
+    <string name="loginAction">:8080/flow/android/androidLogin.action</string>
+    <string name="logoutAction">:8080/flowandroid/androidLogout.action</string>
+    <string name="courseStuAction">:8080/flow/android/androidCourseStu.action</string>
+    <string name="courseTeaAction">:8080/flow/android/androidCourseTea.action</string>
     <string name="login_tishi">登录中，请稍候...</string>
     <string name="user_error">用户名或密码错误</string>
     <string name="net_error">网络链接错误</string>
     
-    <string name="getEngineIdAction">:8080/android/androidGetEngineId.action</string>
-    <string name="consoleurl">:8080/SwfAndroid/Console.html</string>
-    <string name="paperurl">:8080/SwfAndroid/Paper.html</string>
-    <string name="fakeurl">:8080/SwfAndroid/Fake.html</string>
+    <string name="currentCourseAction">flow/android/getCourseById.action</string>
+    
+    <string name="getEngineIdAction">:8080/flow/android/androidGetEngineId.action</string>
+    <string name="consoleurl">:8080/flow/SwfAndroid/Console.html</string>
+    <string name="paperurl">:8080/flow/SwfAndroid/Paper.html</string>
+    <string name="fakeurl">:8080/flow/SwfAndroid/Fake.html</string>
     
 	<!-- 用来与推送过来的字符串进行比较来判断是否含有相应的信息 -->
     <string-array name="strcompare">
@@ -50,8 +56,14 @@
         <item>b</item>
         <!-- 当前模式 -->
         <item>c</item>
-        <!-- 当前案例 -->
-        <item>d</item>
+        <!-- 当前案例 caseId -->
+        <item>d1</item>
+        <!-- 当前案例 caseName -->
+        <item>d2</item>
+        <!-- 当前案例 caseKindId -->
+        <item>d3</item>
+        <!-- 当前案例 engineId -->
+        <item>d4</item>
         <!-- sourceId -->
         <item>e1</item>
         <!-- sourceName -->

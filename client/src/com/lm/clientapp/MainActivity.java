@@ -65,8 +65,6 @@ public class MainActivity extends Activity {
 	private ImageView user_avatar;
 	// 学生名
 	private TextView user_name;
-	// 设置按钮
-	private ImageButton btnSettings;
 
 	private Button tree_btn1;
 	private ExpandableListView tree_list1;
@@ -109,7 +107,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext = MainActivity.this;
-		clientApp = (ClientApp) getApplication();
+		clientApp = (ClientApp) getApplicationContext();
 
 		init();
 		startAPNService();
@@ -134,15 +132,6 @@ public class MainActivity extends Activity {
 		video_btnpause = (Button) findViewById(R.id.video_btnpause);
 		content_video_close = (Button) findViewById(R.id.content_video_close);
 
-		btnSettings = (ImageButton) findViewById(R.id.userinfo_setting);
-		btnSettings.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// 跳转至消息推送设置界面
-				ServiceManager.viewNotificationSettings(mContext);
-			}
-		});
-
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -154,8 +143,8 @@ public class MainActivity extends Activity {
 					PushItem pi = (PushItem) msg.obj;
 					Log.d(LOGTAG, "mode = " + pi.getCurrentMode()
 							+ " teacher = " + pi.getCurrentTeacher()
-							+ " course = " + pi.getCurrentCourse() + " case = "
-							+ pi.getCurrentCase());
+							+ " course = " + pi.getCurrentCourse() + " caseName = "
+							+ pi.getCaseItem().getCaseName());
 					Log.d(LOGTAG, "sourceName = "
 							+ pi.getCurrentCaseSource().getSourceName()
 							+ " sourceUrl = "
@@ -452,27 +441,100 @@ public class MainActivity extends Activity {
 
 	//根据推送的资源信息加载相应的内容
 	private void loadRes(PushItem pi) {
-		int mediaTypeId = pi.getCurrentCaseSource().getMediaTypeId();
 		long caseId = pi.getCurrentCaseSource().getCaseId();
+		int caseKindId = pi.getCaseItem().getCaseKindId();
+		long engineId = pi.getCaseItem().getEngineId();
+		int mediaTypeId = pi.getCurrentCaseSource().getMediaTypeId();
 		String sourceUrl = pi.getCurrentCaseSource().getSourceUrl();
-		String sourceUrlLoad = "http://" + clientApp.getServerIP() + ":8080/"
-				+ sourceUrl;
-		switch (mediaTypeId) {
-		// TODO
-		/*
-		case rafReader:
-			showRAFReader(content_WebView, sourceUrlLoad);
+		String sourceUrlLoad = "http://" + clientApp.getServerIP()
+				+ getResources().getString(R.string.server_port) + sourceUrl;
+		// 根据caseKindId的类型来调用不同的播放器
+		switch (caseKindId) {
+		case 10:
+			// TODO 课程实验
 			break;
-		case console:
-			showConsole(content_WebView, caseId, Long.parseLong(clientApp.getUserId()));
+		case 20:
+			// TODO 课程设计
 			break;
-		case paper:
+		case 30:
+			// 单一资源
+			break;
+		case 40:
+			// 游戏引擎
+			String caseName = pi.getCaseItem().getCaseName();
+			if (caseName.equals("开户申请书")) {
+				// TODO
+			}
+			if (caseName.equals("开户材料")) {
+				// TODO
+			}
+			if (caseName.equals("收配款")) {
+				// TODO
+			}
+			if (caseName.equals("身份验证")) {
+				// TODO
+			}
+			if (caseName.equals("假币识别")) {
+				showFake(content_WebView, Long.parseLong(clientApp.getUserId()));
+			}
+			break;
+		case 50:
+			// TODO 临时案例
+			break;
+		case 60:
+			// TODO 综合案例
+			break;
+		case 70:
+			// 界面引擎
+			break;
+		case 80:
+			// 考试
 			showPaper(content_WebView, caseId, Long.parseLong(clientApp.getUserId()));
 			break;
-		case fake:
-			showFake(content_WebView, Long.parseLong(clientApp.getUserId()));
+		case 110:
 			break;
-		*/
+			/*
+			case rafReader:
+				showRAFReader(content_WebView, sourceUrlLoad);
+				break;
+			case console:
+				showConsole(content_WebView, caseId, Long.parseLong(clientApp.getUserId()));
+				break;
+			case paper:
+				showPaper(content_WebView, caseId, Long.parseLong(clientApp.getUserId()));
+				break;
+			case fake:
+				showFake(content_WebView, Long.parseLong(clientApp.getUserId()));
+				break;
+			*/
+		}
+		// 根据mediaTypeId的类型来加载不同的资源
+		switch (mediaTypeId) {
+		// TODO
+		case 10:
+			// avi
+			break;
+		case 20:
+			// wmv
+			break;
+		case 30:
+			// ppt
+			break;
+		case 40:
+			// jpg
+			break;
+		case 50:
+			// doc
+			break;
+		case 60:
+			// flash播放  swf
+			break;
+		case 70:
+			// rar
+			break;
+		case 80:
+			// swf文件  swf
+			break;
 		default:
 			break;
 		}

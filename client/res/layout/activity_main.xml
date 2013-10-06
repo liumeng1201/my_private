@@ -2,7 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/main_head_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/main_head_title"
+        android:textSize="15sp" />
 
     <!-- 顶部用户信息及设置layout -->
 
@@ -10,6 +19,7 @@
         android:id="@+id/layout_userinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/main_head_title"
         android:layout_margin="10dp" >
 
         <ImageView
@@ -27,9 +37,17 @@
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/userinfo_useravatar"
             android:text="@string/username"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
-        <!-- 
+        <ImageButton
+            android:id="@+id/settings_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/btn_setting_selector" />
+
+        <!--
         <TextView
             android:id="@+id/userinfo_userclass"
             android:layout_width="wrap_content"
@@ -39,7 +57,6 @@
             android:layout_toRightOf="@id/userinfo_useravatar"
             android:text="@string/userclass"
             android:textSize="20dp" />
-         -->
 
         <ImageButton
             android:id="@+id/userinfo_setting"
@@ -48,6 +65,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@android:drawable/ic_menu_preferences" />
+        -->
     </RelativeLayout>
 
     <LinearLayout

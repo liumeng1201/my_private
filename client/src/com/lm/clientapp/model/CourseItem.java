@@ -1,6 +1,7 @@
 package com.lm.clientapp.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class CourseItem implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -10,6 +11,8 @@ public class CourseItem implements Serializable {
 	private String type;
 	private String icon;
 	private String scoreId;
+	// 一个course里可能会有多个case
+	private List<CaseItem> caseList;
 
 	public long getCourseId() {
 		return courseId;
@@ -49,5 +52,13 @@ public class CourseItem implements Serializable {
 
 	public void setScoreId(String scoreid) {
 		this.scoreId = scoreid;
+	}
+
+	public List<CaseItem> getCaseList() {
+		return caseList;
+	}
+
+	public void setCaseList(List<CaseItem> caseList) {
+		this.caseList = caseList;
 	}
 }

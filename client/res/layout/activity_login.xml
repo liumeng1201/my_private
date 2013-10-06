@@ -2,166 +2,167 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" >
+            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/login_title"
+                android:id="@+id/login_head_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_title"
-                android:textSize="40sp" />
+                android:layout_gravity="center_horizontal"
+                android:text="@string/login_head_title"
+                android:textSize="45sp" />
 
-            <TextView
-                android:id="@+id/division"
-                android:layout_width="400dp"
-                android:layout_height="2dp"
-                android:layout_below="@id/login_title"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:background="@android:color/black" />
-
-            <TextView
-                android:id="@+id/text_username"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/division"
-                android:layout_marginRight="25dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/username"
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/input_username"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/text_username"
-                android:layout_below="@id/division"
-                android:layout_toRightOf="@id/text_username" />
-
-            <TextView
-                android:id="@+id/text_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_username"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/password"
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/input_password"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/text_password"
-                android:layout_alignLeft="@id/input_username"
-                android:layout_below="@id/input_username"
-                android:layout_toRightOf="@id/text_password"
-                android:inputType="textPassword" />
-
-            <TextView
-                android:id="@+id/text_serverip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_password"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/serverip"
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/input_serverip"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/text_serverip"
-                android:layout_alignLeft="@id/input_username"
-                android:layout_below="@id/input_password"
-                android:layout_toRightOf="@id/text_serverip" />
-
-            <LinearLayout
-                android:id="@+id/layout_rememberuser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_serverip"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-
-                <CheckBox
-                    android:id="@+id/chb_rememberuser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                android:background="@drawable/login_input_bg2" >
 
                 <TextView
-                    android:id="@+id/text_rememberuser"
+                    android:id="@+id/login_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/remember_user"
-                    android:textSize="20dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_rememberip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/layout_rememberuser"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-
-                <CheckBox
-                    android:id="@+id/chb_rememberip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/login_title"
+                    android:textSize="25sp" />
 
                 <TextView
-                    android:id="@+id/text_rememberip"
+                    android:id="@+id/division"
+                    android:layout_width="400dp"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/login_title"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/text_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/remember_ip"
+                    android:layout_below="@id/division"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/username"
                     android:textSize="20dp" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/layout_rememberip"
-                android:layout_marginTop="20dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal" >
+                <EditText
+                    android:id="@+id/input_username"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/text_username"
+                    android:layout_below="@id/division"
+                    android:layout_toRightOf="@id/text_username" />
+
+                <TextView
+                    android:id="@+id/text_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_username"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/password"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/input_password"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/text_password"
+                    android:layout_alignLeft="@id/input_username"
+                    android:layout_below="@id/input_username"
+                    android:layout_toRightOf="@id/text_password"
+                    android:inputType="textPassword" />
+
+                <TextView
+                    android:id="@+id/text_serverip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_password"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/serverip"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/input_serverip"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/text_serverip"
+                    android:layout_alignLeft="@id/input_username"
+                    android:layout_below="@id/input_password"
+                    android:layout_toRightOf="@id/text_serverip" />
+
+                <LinearLayout
+                    android:id="@+id/layout_rememberuser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_serverip"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <CheckBox
+                        android:id="@+id/chb_rememberuser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/text_rememberuser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remember_user"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_rememberip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout_rememberuser"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <CheckBox
+                        android:id="@+id/chb_rememberip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/text_rememberip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remember_ip"
+                        android:textSize="20dp" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="30dp"
-                    android:padding="20dp"
-                    android:text="@string/login" />
-
-                <Button
-                    android:id="@+id/btn_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:text="@string/cancel" />
-            </LinearLayout>
-        </RelativeLayout>
+                    android:layout_below="@id/layout_rememberip"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/gray_btn_selector"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="@string/login_btn"
+                    android:textSize="25sp" />
+            </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.lm.clientapp.model.CourseItem;
 
+//解析课程树
 public class CourseHandler extends DefaultHandler {
 	private static final String TAG = "CourseHandler";
 	// 用于存放解析出来的课程树信息
