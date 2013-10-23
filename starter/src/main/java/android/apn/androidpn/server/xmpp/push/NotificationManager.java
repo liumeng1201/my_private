@@ -60,6 +60,7 @@ public class NotificationManager {
     public void sendBroadcast(String apiKey, String title, String message,
             String uri) {
         log.debug("sendBroadcast()...111");
+        log.debug("pushinfo = " + message);
         IQ notificationIQ = createNotificationIQ(apiKey, title, message, uri);
         for (ClientSession session : sessionManager.getSessions()) {
             if (session.getPresence().isAvailable()) {
